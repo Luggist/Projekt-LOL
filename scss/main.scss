@@ -1,0 +1,68 @@
+@mixin breakpoint($breakpoint) {
+    @media (min-width: $breakpoint) { @content; }
+}
+
+$desktop            : 990px;
+$blue               : #337ab7;
+
+$lineColor          : $blue;
+
+
+#main {
+
+    margin:0 auto;
+    width: 90%;
+
+    @include breakpoint($desktop) {
+        width: $desktop;
+    }
+}
+
+header {
+    .inner {
+        margin:0 auto;
+        width: 90%;
+
+        .logo {
+            margin-top:10px;
+            margin-bottom:30px;
+
+            .name {
+                font-size:25px;
+                font-weight: 400;
+            }
+
+            .version {
+                &::before {
+                    content: "Version";
+                    display: inline-block;
+                    margin-right:5px;
+                }
+
+                color:#aaa;
+                font-size:10px;
+            }
+        }
+
+        @include breakpoint($desktop) {
+            width: $desktop;
+        }
+    }
+
+
+
+    &::after {
+        content: '';
+        display: block;
+        height: 10px;
+        width: 100%;
+        background-color:$lineColor;
+        margin-top:5px;
+    }
+
+    margin-bottom:20px;
+}
+
+
+.toast-success{background-color:#dff0d8}
+.toast-error{background-color:#f2dede}
