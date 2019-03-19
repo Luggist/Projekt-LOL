@@ -1,6 +1,6 @@
 <?php
 
-define('URL_PATH', '/web/lolstats');
+define('URL_PATH', '/lolstats');
 
 define('INDEX_URL', 'index');
 

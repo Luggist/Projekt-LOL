@@ -9,7 +9,7 @@ class IndexController extends Controller
 
 	public function run()
 	{
-		$this->view->title = "Übersicht";
+		$this->view->title = "LOL Stats";
 	}
 
 }
