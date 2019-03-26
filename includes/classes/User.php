@@ -66,11 +66,11 @@ class User extends Database
 	{
 		if(API_CALL === true)
 		{
-			header('Location: ../'.LOGIN_URL);
+			header('Location: ../');
 		}
 		else
 		{
-			header('Location: '.LOGIN_URL);
+			header('Location: /lolstats');
 		}
 		header('Status: 303');
 		exit();

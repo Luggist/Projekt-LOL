@@ -32,10 +32,64 @@ function CallAPI($method, $url, $data = false)
 
     return $result;
 }
+if(isset($_POST['request'])){
+    $output = array(
+        "state" => false,
+        "output" => "Error: Get no keys"
+    );
+    $request = stripslashes($_POST['request']);
+    if($request == 'register'){
+        $username = stripslashes($_POST['username']);
+        $password = stripslashes($_POST['password']);
+        $password2 = stripslashes($_POST['password2']);
+        if(strlen(trim($username)) == 0 || strlen(trim($password)) == 0 || strlen(trim($password2)) == 0){
+            $output['output'] = 'Die Felder dürfen nicht leer sein!';
+        } else {
+            $db = new PDO('mysql:host=localhost;dbname=game', 'root');
+            $stmt = $db->prepare('SELECT * FROM user WHERE username = ?');
+            $stmt->execute(array($username));
+            if($stmt->rowCount() > 0){
+                $output['output'] = 'Dieser Benutzer existiert bereits!';
+            } else {
+                if($password != $password2){
+                    $output['output'] = 'Die Passwörter sind nicht identisch!';
+                } else {
+                    $stmt = $db->prepare('INSERT INTO user (username, password) VALUES (?, ?)');
+                    $stmt->execute(array($username, md5($password)));
+                    $output['state'] = true;
+                    $output['output'] = 'Erfolgreich registriert! Melde dich nun an!';
+                }
+            }
+        }
+    } else if($request == 'login'){
+        $username = stripslashes($_POST['username']);
+        $password = stripslashes($_POST['password']);
+        if(strlen(trim($username)) == 0 || strlen(trim($password)) == 0){
+            $output['output'] = 'Die Felder dürfen nicht leer sein!';
+        } else {
+            $db = new PDO('mysql:host=localhost;dbname=game', 'root');
+            $stmt = $db->prepare('SELECT * FROM user WHERE username = ?');
+            $stmt->execute(array($username));
+            if($stmt->rowCount() < 0){
+                $output['output'] = 'Dieser Benutzer existiert nicht!';
+            } else {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                if(md5($password) == $row['password']){
+                    $output['state'] = true;
+                } else {
+                    $output['output'] = 'Benutzername oder Passwort ist falsch!';
+                }
+            }
+        }
+    }
+    header('Content-type: application/json');
+    echo json_encode($output);
+    exit;
+}
 if(isset($_POST['apirequest'])) {
     $apiRequest = stripslashes($_POST['apirequest']);
     if ($apiRequest == 'summoner') {
-        $apiKey = 'RGAPI-d6eb0f20-247c-463c-80b1-7da93fd9c8d3';
+        $apiKey = 'RGAPI-f4adc812-8386-487d-a0cd-d4df3e67b9b4';
         $summonerClean = $_POST['summoner'];
         $summoner = str_replace(' ', '%20', $summonerClean);
         /*$api = new classes\ExternAPI();
@@ -128,338 +182,9 @@ if(isset($_POST['apirequest'])) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-
+    <link href="scss/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
     <style>
-        html {
-            font-family: 'Lato', sans-serif;
-        }
-        .header-img {
-            max-width: 100%;
-            width: 100%;
-            margin-left: auto;
-            margin-right: auto;
-            padding-left: 10px;
-            padding-right: 10px;
-            padding-top: 10px;
-            height: 300px;
-            background-image: url("img/lolheader.jpg");
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
 
-        .header-img .overlay {
-            position: absolute;
-            top: 240px;
-            left: 50%;
-            width: 700px;
-            margin-left: -350px;
-            background-color: #1e2328;
-            padding: 40px 60px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 700;
-            transition: top .5s ease-in-out;
-        }
-
-        .overlay {
-            border: 2px;
-            color: #72542a;
-            background-clip:padding-box;
-            border: solid;
-            border-radius: initial;
-
-        :before {
-            content: '';
-            position: absolute;
-            top: 0; right: 0; bottom: 0; left: 0;
-            z-index: -1;
-            margin: -$border; /* !importantÃ© */
-            border-radius: inherit; /* !importantÃ© */
-            background: linear-gradient(to right, red, orange);
-        }
-        }
-
-        .header-img .overlay input {
-            margin-bottom: 20px;
-            text-align: center;
-            height: 70px;
-            font-size: 35pt;
-            outline: 0 !important;
-            border: 3px solid rgba(192,252,253,.7);
-            border-image: linear-gradient(to bottom,#08abac 0,#01698b 100%);
-            color: #f0e6d2;
-            background-color: #1e2328;
-            border-image-slice: 1;
-            transition: all 0.5s ease;
-        }
-
-        .col-md-3 {
-            width:450px;
-            border: 2px solid #72542a;
-            position: relative;
-            padding-left: 0;
-        }
-
-        .header-img .overlay input:hover {
-            box-shadow:0 0 10px 4px rgba(192,252,253,.4),inset 0 0 5px 2px rgba(192,252,253,.3);
-            border:3px solid rgba(192,252,253,.7);
-        }
-
-        .hr-gold {
-            height: 2px;
-            width: 100%;
-            z-index: 700;
-            padding-bottom: 50px;
-            overflow: hidden;
-            text-align: center;
-        }
-        .hr-gold h3 {
-            display: inline-block;
-            position: relative;
-            color: #72542a;
-        }
-
-        h3::before,
-        h3::after {
-            content: "";
-            position: absolute;
-            border-top: 2px solid #c7b184;
-            top: 50%;
-            width: 2000px;
-        }
-        h3::before {
-            margin-right: 15px;
-            right: 100%;
-        }
-        h3::after {
-            margin-left: 15px;
-            left: 100%;
-        }
-
-        .c-btn {
-            display: -ms-inline-flexbox;
-            display: inline-flex;
-            -webkit-box-align: center;
-            -ms-flex-align: center;
-            align-items: center;
-            -webkit-box-pack: center;
-            -ms-flex-pack: center;
-            justify-content: center;
-            vertical-align: middle;
-            cursor: pointer;
-            height: 3.00em;
-            font-size: 15pt;
-            max-width: 100%;
-            border: 0;
-            color: #c7b184;
-            fill: currentColor;
-            -webkit-box-shadow: 0 0 28px #000;
-            box-shadow: 0 0 28px #000;
-            line-height: 1;
-            font-weight: 500;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            position: relative;
-            z-index: 1;
-            -webkit-transition: .15s;
-            transition: .15s
-        }
-
-        .c-btn:active,
-        .c-btn:focus,
-        .c-btn:hover {
-            color: #fff;
-            text-decoration: none;
-            -webkit-box-shadow: 0 0 28px #000, 0 0 28px rgba(0, 0, 0, .6);
-            box-shadow: 0 0 28px #000, 0 0 28px rgba(0, 0, 0, .6)
-        }
-
-        .c-btn:active::after,
-        .c-btn:focus::after,
-        .c-btn:hover::after {
-            background: #1a1d21
-        }
-
-        .c-btn::after,
-        .c-btn::before {
-            content: '';
-            display: block;
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            z-index: -1
-        }
-
-        .c-btn::before {
-            background: -webkit-gradient(linear, left bottom, left top, from(#72542a), to(#bd9e5e));
-            background: linear-gradient(0deg, #72542a 0, #bd9e5e 100%)
-        }
-
-        .c-btn::after {
-            margin: 1px;
-            background: #16181d;
-            -webkit-transition: .15s;
-            transition: .15s
-        }
-
-        /* Profile container */
-        .profile {
-            position: fixed;
-            min-width: 100%;
-            z-index: 10;
-            top: 300px;
-            bottom: 100px;
-            border-top: 2px solid #c7b184;
-            background-color: #303840;
-        }
-
-        /* Profile sidebar */
-        .profile-sidebar {
-            padding: 20px 0 10px 0;
-            z-index: 15;
-            position: absolute;
-            width: 100%;
-            margin: 0 auto;
-            max-height: 455px;
-        }
-
-        .profile-userpic img.pic {
-            position: relative;
-            width: 40%;
-            left: 50%;
-            margin-left: -20%;
-            z-index: 102;
-            -webkit-border-radius: 50% !important;
-            -moz-border-radius: 50% !important;
-            border-radius: 50% !important;
-            border: 4px solid #c7b184;
-            object-fit: contain;
-        }
-
-        .profile-userpic img.level-border {
-            position: absolute;
-            z-index: 101;
-            width: 55%;
-            left: 50%;
-            margin-left: -27%;
-            margin-top: -8%;
-        }
-
-
-
-        .profile-usertitle {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        .profile-usertitle-name {
-            color: #c7b184;
-            font-size: 40px;
-            font-weight: 600;
-            margin-bottom: 7px;
-        }
-
-        .profile-usertitle-level {
-            text-transform: uppercase;
-            color: #c7b184;
-            font-size: 40px;
-            font-weight: 600;
-            padding-top: 15px;
-            border: 4px solid #c7b184;
-            background-color: #303840;
-            width: 100px;
-            height: 100px;
-            -webkit-border-radius: 50% !important;
-            -moz-border-radius: 50% !important;
-            border-radius: 50% !important;
-        }
-
-        /* Profile Content */
-        .profile-content {
-            padding: 20px;
-            background: #1e2328;
-            min-height: 460px;;
-            color: #f0e6d2;
-            border: 3px solid rgba(192,252,253,.7);
-            border-image: linear-gradient(to bottom,#08abac 0,#01698b 100%);
-            border-image-slice: 1;
-        }
-
-
-        .dark-overlay {
-            background-color: black;
-            opacity: .7;
-            width: 100%;
-            height: 100%;
-            max-height: 459px;
-            z-index: 10;
-            position: absolute;
-        }
-
-        #stats {
-            position: absolute;
-            color: #f0e6d2;
-            border-top: 2px solid #c7b184;
-            background-color: #303840;
-            width: 100%;
-            top: 300px;
-            bottom: 100px;
-            padding-bottom:100px;
-        }
-
-        #stats .row {
-            padding-top: 90px;
-            padding-left: 50px;
-            padding-right: 50px;
-        }
-
-        #stats .info {
-            padding-top: 250px;
-        }
-
-        footer {
-            position: absolute;
-            bottom: 0;
-            height: 100px;
-            width: 100%;
-            background: #1e2328;
-            text-align: center;
-            color: #f0e6d2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-top: 2px solid #c7b184;
-        }
-
-        .col {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        .col-md-3 {
-            padding-left: 0;
-        }
-
-        .col i {
-            font-size: 50pt;
-            font-weight: bold;
-        }
-
-        .row {
-            margin-right: 0 !important;
-        }
 
     </style>
 </head>
@@ -469,15 +194,26 @@ if(isset($_POST['apirequest'])) {
     <div class="header-img">
         <div class="overlay">
             <input id="summonerInput" class="form-control rounded-0" placeholder="Summonername" autofocus>
+
             <div class="hr-gold"><h3>OR</h3></div>
-            <button class="c-btn btn-block rounded-0">L O G I N</button><br>
-            <button class="c-btn btn-block rounded-0">R E G I S T E R</button>
+            <button id="searchBtn" class="c-btn btn-block rounded-0 d-none" onclick="searchSummoner()">S E A R C H</button>
+            <div id="loginRegister">
+                <input class="form-control" type="hidden">
+                <input id="username" class="form-control d-none" type="text" placeholder="Benutzername">
+                <input id="password" class="form-control d-none" type="password" placeholder="Passwort">
+                <button id="loginBtn" class="c-btn btn-block rounded-0" onclick="login(this)">L O G I N</button><br><br>
+                <input id="usernameR" class="form-control d-none" type="text" placeholder="Benutzername">
+                <input id="passwordR" class="form-control d-none" type="password" placeholder="Passwort">
+                <input id="passwordR2" class="form-control d-none" type="password" placeholder="Passwort wiederholen">
+                <button id="registerBtn" class="c-btn btn-block rounded-0" onclick="register(this)">R E G I S T E R</button>
+                <div id="response" class="error"></div>
+            </div>
         </div>
     </div>
     <div id="stats">
     </div>
     <footer>
-        WEB-Projekt<br> Â© Julian Loferer | Matthias Oberleitner | Lukas Stuefer
+        WEB-Projekt<br> &copy; Julian Loferer | Matthias Oberleitner | Lukas Stuefer
     </footer>
 
 </main><!-- /.container -->
@@ -487,27 +223,174 @@ if(isset($_POST['apirequest'])) {
 <script>
     $('#summonerInput').on('keyup', function (e) {
         if(e.keyCode == 13){
-            var summoner = $('#summonerInput').val();
+            searchSummoner();
+        }
+    });
+
+    function searchSummoner(){
+
+        var summoner = $('#summonerInput').val().toLowerCase();
+        $.ajax({
+            url: "index",
+            method: "POST",
+            data: {
+                apirequest: "summoner",
+                summoner: summoner
+            },
+            beforeSend: function(){
+                $('#summonerInput').prop('disabled', 'disabled');
+                $('#summonerInput').val('Lädt...');
+            },
+            success: function(data){
+                $('.header-img .overlay').css('left', '0');
+                $('.header-img .overlay').css('flex-direction', 'row');
+                $('.header-img .overlay').css('margin-left', '0');
+                $('.header-img .overlay').css('height', '80px');
+                $('.header-img .overlay').css('width', '100vw');
+                $('.header-img .overlay').css('top', '302px');
+                $('.header-img .overlay').css('border', '0');
+                $('.header-img .overlay').css('justify-content', 'space-between');
+                $('.header-img .overlay').css('border-bottom', '2px solid #c7b184');
+                $('.header-img .overlay input').css('height', '50px');
+                $('.header-img .overlay input').css('margin-bottom', '0');
+                $('.header-img .overlay input').css('max-width', '25%');
+                $('.header-img .overlay input').css('float', 'left');
+                $('.header-img .overlay input').css('margin-left', '100px');
+                $('#loginRegister').css('display', 'flex');
+                $('#loginRegister').css('flex-direction', 'row');
+                $('.c-btn').css('width', '25%');
+                $('.c-btn').css('height', '50px');
+                $('#searchBtn').removeClass('d-none');
+                $('.hr-gold').addClass('d-none');
+                $('#stats').html('');
+                $('#stats').html(data);
+                $('#summonerInput').prop('disabled', '');
+                $('#summonerInput').val(summoner);
+            }
+        });
+    }
+
+    $('#password').on('keyup', function (event) {
+        if(event.keyCode == 13){
+            login('#loginBtn');
+        }
+    });
+    $('#passwordR2').on('keyup', function (event) {
+        if(event.keyCode == 13){
+            register('#registerBtn');
+        }
+    });
+    function login(ele){
+        let userEle = $('#username');
+        let pwEle = $('#password');
+        let response = $('#response');
+        let element = $(ele);
+        let userEleR = $('#usernameR');
+        let pwEleR = $('#passwordR');
+        let pwEleR2 = $('#passwordR2');
+        if(userEle.hasClass('d-none')){
+            userEle.removeClass('d-none');
+            pwEle.removeClass('d-none');
+            if(!userEleR.hasClass('d-none')){
+                userEleR.addClass('d-none');
+                pwEleR.addClass('d-none');
+                pwEleR2.addClass('d-none');
+            }
+        } else {
+            let username = userEle.val();
+            let password = pwEle.val();
             $.ajax({
                 url: "index",
                 method: "POST",
                 data: {
-                    apirequest: "summoner",
-                    summoner: summoner
+                    request: "login",
+                    username: username,
+                    password: password
                 },
-                beforeSend: function(){
-                    $('#summonerInput').prop('disabled', 'disabled');
-                    $('#summonerInput').val('LÃ¤dt...');
+                beforeSend: function () {
+                    element.html('<i class="fa fa-spinner fa-spin"></i> Überprüfe...');
+                    element.prop('disabled', 'disabled');
                 },
-                success: function(data){
-                    $('.header-img .overlay').css('top', '100px');
-                    $('#stats').html('');
-                    $('#stats').html(data);
-                    $('#summonerInput').prop('disabled', '');
-                    $('#summonerInput').val(summoner);
+                success: function (data) {
+                    if (!data.state) {
+                        response.removeClass('error');
+                        response.removeClass('success');
+                        response.addClass('error');
+                        response.css('display', 'block');
+                        response.html(data.output);
+                        element.html('L O G I N');
+                        element.prop('disabled', '');
+                        setTimeout(function () {
+                            response.css('display', 'none');
+                        }, 2000);
+                    } else {
+                        window.location = '/lolstats/dashboard';
+                    }
                 }
             });
         }
-    })
+    }
+    function register(ele){
+        let userEle = $('#usernameR');
+        let pwEle = $('#passwordR');
+        let pw2Ele = $('#passwordR2');
+        let userEleL = $('#username');
+        let pwEleL = $('#password');
+        if(userEle.hasClass('d-none')){
+            userEle.removeClass('d-none');
+            pwEle.removeClass('d-none');
+            pw2Ele.removeClass('d-none');
+            if(!userEleL.hasClass('d-none')){
+                userEleL.addClass('d-none');
+                pwEleL.addClass('d-none');
+            }
+        } else {
+            let username = userEle.val();
+            let password = pwEle.val();
+            let password2 = pw2Ele.val();
+            let response = $('#response');
+            let element = $(ele);
+            $.ajax({
+                url: "index",
+                method: "POST",
+                data: {
+                    request: "register",
+                    username: username,
+                    password: password,
+                    password2: password2
+                },
+                beforeSend: function(){
+                    element.html('<i class="fa fa-spinner fa-spin"></i> Überprüfe...');
+                    element.prop('disabled', 'disabled');
+                },
+                success: function (data) {
+                    if(!data.state){
+                        response.removeClass('error');
+                        response.removeClass('success');
+                        response.addClass('error');
+                        response.html(data.output);
+                        response.css('display', 'block');
+                        element.html('REGISTER');
+                        element.prop('disabled', '');
+                        setTimeout(function () {
+                            response.css('display', 'none');
+                        }, 2000);
+
+                    } else {
+                        response.removeClass('error');
+                        response.removeClass('success');
+                        response.addClass('success');
+                        response.html(data.output);
+                        response.css('display', 'block');
+                        element.html('REGISTER');
+                        element.prop('disabled', '');
+                        setTimeout(function () {
+                            response.css('display', 'none');
+                        }, 2000);
+                    }
+                }
+            });
+        }
+    }
 </script>
 </html>
