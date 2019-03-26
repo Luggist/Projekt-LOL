@@ -89,22 +89,10 @@ if(isset($_POST['request'])){
 if(isset($_POST['apirequest'])) {
     $apiRequest = stripslashes($_POST['apirequest']);
     if ($apiRequest == 'summoner') {
-        $apiKey = 'RGAPI-f4adc812-8386-487d-a0cd-d4df3e67b9b4';
         $summonerClean = $_POST['summoner'];
         $summoner = str_replace(' ', '%20', $summonerClean);
-        /*$api = new classes\ExternAPI();
-        $arr = $api->call('summoner/v4/summoners/by-name/' . $summoner);*/
-        $url = 'https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/' . $summoner . '?api_key=' . $apiKey;
-        $resp = CallAPI('GET', $url);
-        if(strlen($resp) == 0){
-            $resp = file_get_contents($url);
-        }
-        $arr = json_decode($resp, true);
-        /*
-        $champMastery = $api->call('champion-mastery/v4/champion-masteries/by-summoner/' . $arr["id"]);*/
-
-        $resp = CallAPI('GET', 'https://euw1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/' . $arr["id"] . '?api_key=' . $apiKey);
-        $champMastery = json_decode($resp, true);
+        $arr = $this->api->call('https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/' . $summoner);
+        $champMastery = $this->api->call('https://euw1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/' . $arr["id"]);
         $champData = json_decode(file_get_contents('http://ddragon.leagueoflegends.com/cdn/6.24.1/data/de_DE/champion.json'), true);
         $champMasteryName = '';
         foreach ($champData["data"] as $champ) {
