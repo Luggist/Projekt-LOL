@@ -1,0 +1,321 @@
+@import "compass/css3";
+
+html {
+  font-family: 'Lato', sans-serif;
+}
+.header-img {
+  max-width: 100%;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  height: 300px;
+  background-image: url("../../img/lolheader.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  .overlay {
+    position: absolute;
+    top: 240px;
+    left: 50%;
+    width: 700px;
+    margin-left: -350px;
+    background-color: #1e2328;
+    padding: 40px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all .5s ease-in-out;
+    input {
+      margin-bottom: 20px;
+      text-align: center;
+      height: 70px;
+      font-size: 35pt;
+      outline: 0 !important;
+      border: 3px solid rgba(192,252,253,.7);
+      border-image: linear-gradient(to bottom,#08abac 0,#01698b 100%);
+      color: #f0e6d2;
+      background-color: #1e2328;
+      border-image-slice: 1;
+      transition: all 0.5s ease;
+      &:hover {
+        box-shadow:0 0 10px 4px rgba(192,252,253,.4),inset 0 0 5px 2px rgba(192,252,253,.3);
+        border:3px solid rgba(192,252,253,.7);
+      }
+    }
+  }
+}
+
+.overlay {
+  border: 2px;
+  color: #72542a;
+  background-clip:padding-box;
+  border: solid;
+  border-radius: initial;
+
+}
+
+
+#loginRegister {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.col-md-3 {
+  width:450px;
+  border: 2px solid #72542a;
+  position: relative;
+  padding-left: 0;
+}
+
+.hr-gold {
+  height: 2px;
+  width: 100%;
+  padding-bottom: 50px;
+  overflow: hidden;
+  text-align: center;
+  h3 {
+    display: inline-block;
+    position: relative;
+    color: #72542a;
+  }
+}
+
+h3::before,
+h3::after {
+  content: "";
+  position: absolute;
+  border-top: 2px solid #c7b184;
+  top: 50%;
+  width: 2000px;
+}
+h3::before {
+  margin-right: 15px;
+  right: 100%;
+}
+h3::after {
+  margin-left: 15px;
+  left: 100%;
+}
+
+.c-btn {
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  vertical-align: middle;
+  cursor: pointer;
+  height: 3.00em;
+  font-size: 15pt;
+  max-width: 100%;
+  border: 0;
+  color: #c7b184;
+  fill: currentColor;
+  -webkit-box-shadow: 0 0 28px #000;
+  box-shadow: 0 0 28px #000;
+  line-height: 1;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  z-index: 1;
+  -webkit-transition: .15s;
+  transition: .15s;
+  &:active,
+  &:focus,
+  &:hover {
+    color: #fff;
+    text-decoration: none;
+    -webkit-box-shadow: 0 0 28px #000, 0 0 28px rgba(0, 0, 0, .6);
+    box-shadow: 0 0 28px #000, 0 0 28px rgba(0, 0, 0, .6);
+    &::after {
+      background: #1a1d21
+    }
+  }
+  &::after,
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1
+  }
+
+  &::before {
+    background: -webkit-gradient(linear, left bottom, left top, from(#72542a), to(#bd9e5e));
+    background: linear-gradient(0deg, #72542a 0, #bd9e5e 100%)
+  }
+
+  &::after {
+    margin: 1px;
+    background: #16181d;
+    -webkit-transition: .15s;
+    transition: .15s
+  }
+}
+
+
+
+/* Profile container */
+.profile {
+  position: fixed;
+  min-width: 100%;
+  z-index: 10;
+  top: 300px;
+  bottom: 100px;
+  border-top: 2px solid #c7b184;
+  background-color: #303840;
+}
+
+/* Profile sidebar */
+.profile-sidebar {
+  padding: 20px 0 10px 0;
+  z-index: 15;
+  position: absolute;
+  width: 100%;
+  margin: 0 auto;
+  max-height: 455px;
+}
+
+.profile-userpic img.pic {
+  position: relative;
+  width: 40%;
+  left: 50%;
+  margin-left: -20%;
+  z-index: 102;
+  -webkit-border-radius: 50% !important;
+  -moz-border-radius: 50% !important;
+  border-radius: 50% !important;
+  border: 4px solid #c7b184;
+  object-fit: contain;
+}
+
+.profile-userpic img.level-border {
+  position: absolute;
+  z-index: 101;
+  width: 55%;
+  left: 50%;
+  margin-left: -27%;
+  margin-top: -8%;
+}
+
+
+
+.profile-usertitle {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.profile-usertitle-name {
+  color: #c7b184;
+  font-size: 40px;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+
+.profile-usertitle-level {
+  text-transform: uppercase;
+  color: #c7b184;
+  font-size: 40px;
+  font-weight: 600;
+  padding-top: 15px;
+  border: 4px solid #c7b184;
+  background-color: #303840;
+  width: 100px;
+  height: 100px;
+  -webkit-border-radius: 50% !important;
+  -moz-border-radius: 50% !important;
+  border-radius: 50% !important;
+}
+
+/* Profile Content */
+.profile-content {
+  padding: 20px;
+  background: #1e2328;
+  min-height: 460px;;
+  color: #f0e6d2;
+  border: 3px solid rgba(192,252,253,.7);
+  border-image: linear-gradient(to bottom,#08abac 0,#01698b 100%);
+  border-image-slice: 1;
+}
+
+
+.dark-overlay {
+  background-color: black;
+  opacity: .7;
+  width: 100%;
+  height: 100%;
+  max-height: 459px;
+  z-index: 10;
+  position: absolute;
+}
+
+#stats {
+  position: absolute;
+  color: #f0e6d2;
+  border-top: 2px solid #c7b184;
+  background-color: #303840;
+  width: 100%;
+  top: 300px;
+  bottom: 100px;
+  padding-bottom:100px;
+  z-index: -1;
+  .row {
+    padding-top: 90px;
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+  .info {
+    padding-top: 250px;
+  }
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  height: 100px;
+  width: 100%;
+  background: #1e2328;
+  text-align: center;
+  color: #f0e6d2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 2px solid #c7b184;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  i {
+    font-size: 50pt;
+    font-weight: bold;
+  }
+}
+
+.col-md-3 {
+  padding-left: 0;
+}
+
+.row {
+  margin-right: 0 !important;
+}
+
