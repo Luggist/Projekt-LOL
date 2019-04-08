@@ -1,6 +1,6 @@
 <?php
 
-define('URL_PATH', '/lolstats');
+define('URL_PATH', '/league');
 
-define('INDEX_URL', '/lolstats');
+define('INDEX_URL', '/league');
 

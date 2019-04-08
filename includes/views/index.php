@@ -1,37 +1,4 @@
 <?php
-
-function CallAPI($method, $url, $data = false)
-{
-    $curl = curl_init();
-
-    switch ($method)
-    {
-        case "POST":
-            curl_setopt($curl, CURLOPT_POST, 1);
-
-            if ($data)
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-            break;
-        case "PUT":
-            curl_setopt($curl, CURLOPT_PUT, 1);
-            break;
-        default:
-            if ($data)
-                $url = sprintf("%s?%s", $url, http_build_query($data));
-    }
-
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-    $result = curl_exec($curl);
-    if(curl_errno($curl))
-    {
-        echo 'cURL-Fehler: ' . curl_error($curl);
-    }
-    curl_close($curl);
-
-    return $result;
-}
 if(isset($_POST['request'])){
     $output = array(
         "state" => false,
@@ -146,7 +113,20 @@ if(isset($_POST['apirequest'])) {
                 </div>
                 <div class="col-md-9">
                     <div class="profile-content">
-                       Some user related content goes here...
+                       <h5 class="pl-2 pt-2">Matchhistory:</h5>
+                       <ul class="list-group list-group-flush bg-loldark">
+                          <li class="list-group-item"><span class="text-warning">URF</span> <span class="text-muted">5 days ago</span> <span class="text-success">WIN</span> <span><img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/Ekko.png" width="16px" height="16px" alt="CHAMPION PLAYED IMAGE"/> ' . $arr["name"] . '</span> <span class="float-right"><img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/Ahri.png" width="16px" height="16px" alt="PARTICIPANT CHAMPION IMAGE"/> xZezzyx
+                          <img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/Annie.png" width="16px" height="16px" alt="PARTICIPANT CHAMPION IMAGE"/> xOnionx
+                          <img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/Braum.png" width="16px" height="16px" alt="PARTICIPANT CHAMPION IMAGE"/> MingaKoala
+                          <img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/Olaf.png" width="16px" height="16px" alt="PARTICIPANT CHAMPION IMAGE"/> Lord of Muck</span></li>
+                          <li class="list-group-item"><span class="text-warning">GameMode</span> <span class="text-muted">TIME</span> <span class="text-success">WIN</span>/<span class="text-danger">LOST</span> <span>CHAMPION PLAYED IMAGE</span> <span class="float-right">PARTICIPANTS</span></li>
+                          <li class="list-group-item"><span class="text-warning">GameMode</span> <span class="text-muted">TIME</span> <span class="text-success">WIN</span>/<span class="text-danger">LOST</span> <span>CHAMPION PLAYED IMAGE</span> <span class="float-right">PARTICIPANTS</span></li>
+                          <li class="list-group-item"><span class="text-warning">GameMode</span> <span class="text-muted">TIME</span> <span class="text-success">WIN</span>/<span class="text-danger">LOST</span> <span>CHAMPION PLAYED IMAGE</span> <span class="float-right">PARTICIPANTS</span></li>
+                          <li class="list-group-item"><span class="text-warning">GameMode</span> <span class="text-muted">TIME</span> <span class="text-success">WIN</span>/<span class="text-danger">LOST</span> <span>CHAMPION PLAYED IMAGE</span> <span class="float-right">PARTICIPANTS</span></li>
+                          <li class="list-group-item"><span class="text-warning">GameMode</span> <span class="text-muted">TIME</span> <span class="text-success">WIN</span>/<span class="text-danger">LOST</span> <span>CHAMPION PLAYED IMAGE</span> <span class="float-right">PARTICIPANTS</span></li>
+                          <li class="list-group-item"><span class="text-warning">GameMode</span> <span class="text-muted">TIME</span> <span class="text-success">WIN</span>/<span class="text-danger">LOST</span> <span>CHAMPION PLAYED IMAGE</span> <span class="float-right">PARTICIPANTS</span></li>
+                          <li class="list-group-item"><span class="text-warning">GameMode</span> <span class="text-muted">TIME</span> <span class="text-success">WIN</span>/<span class="text-danger">LOST</span> <span>CHAMPION PLAYED IMAGE</span> <span class="float-right">PARTICIPANTS</span></li>
+                       </ul>
                     </div>
                 </div>
             </div>';
@@ -183,9 +163,9 @@ if(isset($_POST['apirequest'])) {
         <div class="overlay">
             <input id="summonerInput" class="form-control rounded-0" placeholder="Summonername" autofocus>
 
-            <div class="hr-gold"><h3>OR</h3></div>
-            <button id="searchBtn" class="c-btn btn-block rounded-0 d-none" onclick="searchSummoner()">S E A R C H</button>
-            <div id="loginRegister">
+            <!--<div class="hr-gold"><h3>OR</h3></div>-->
+            <button id="searchBtn" class="c-btn btn-block rounded-0" onclick="searchSummoner()">S E A R C H</button>
+            <!--<div id="loginRegister">
                 <input class="form-control" type="hidden">
                 <input id="username" class="form-control d-none" type="text" placeholder="Benutzername">
                 <input id="password" class="form-control d-none" type="password" placeholder="Passwort">
@@ -195,7 +175,7 @@ if(isset($_POST['apirequest'])) {
                 <input id="passwordR2" class="form-control d-none" type="password" placeholder="Passwort wiederholen">
                 <button id="registerBtn" class="c-btn btn-block rounded-0" onclick="register(this)">R E G I S T E R</button>
                 <div id="response" class="error"></div>
-            </div>
+            </div>-->
         </div>
     </div>
     <div id="stats">
@@ -237,7 +217,8 @@ if(isset($_POST['apirequest'])) {
                 $('.header-img .overlay').css('width', '100vw');
                 $('.header-img .overlay').css('top', '302px');
                 $('.header-img .overlay').css('border', '0');
-                $('.header-img .overlay').css('justify-content', 'space-between');
+                $('.header-img .overlay').css('justify-content', 'flex-start');
+                $('.header-img .overlay input').css('margin-right', '50px');
                 $('.header-img .overlay').css('border-bottom', '2px solid #c7b184');
                 $('.header-img .overlay input').css('height', '50px');
                 $('.header-img .overlay input').css('margin-bottom', '0');

@@ -262,13 +262,31 @@ h3::after {
 /* Profile Content */
 /* line 247, ../sass/screen.scss */
 .profile-content {
-  padding: 20px;
   background: #1e2328;
   min-height: 460px;
   color: #f0e6d2;
   border: 3px solid rgba(192, 252, 253, 0.7);
   border-image: linear-gradient(to bottom, #08abac 0%, #01698b 100%);
   border-image-slice: 1;
+}
+
+.bg-loldark {
+  max-height: 100%;
+  overflow-y: scroll;
+}
+
+.bg-loldark .list-group-item {
+  cursor: pointer;
+  transition: font-size .5s ease-in-out;
+}
+
+.bg-loldark .list-group-item:hover {
+  font-size: 15pt;
+}
+
+.bg-loldark li {
+  background-color: #1e2328 !important;
+  border-color: white !important;
 }
 
 /* line 258, ../sass/screen.scss */
