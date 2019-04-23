@@ -273,15 +273,12 @@ h3::after {
 .bg-loldark {
   max-height: 100%;
   overflow-y: scroll;
+  height: 400px;
 }
 
 .bg-loldark .list-group-item {
   cursor: pointer;
   transition: font-size .5s ease-in-out;
-}
-
-.bg-loldark .list-group-item:hover {
-  font-size: 15pt;
 }
 
 .bg-loldark li {
@@ -317,6 +314,23 @@ h3::after {
   padding-top: 90px;
   padding-left: 50px;
   padding-right: 50px;
+  overflow-y: scroll;
+  scrollbar-color: #c7b184 transparent ;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c7b184;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #72542a;
 }
 /* line 283, ../sass/screen.scss */
 #stats .info {

@@ -133,22 +133,26 @@ class IndexController extends Controller
                     <div class="profile-content">
                        <h5 class="pl-2 pt-2">Matchhistory:</h5>
                        <ul class="list-group list-group-flush bg-loldark">';
-
-                            foreach($matchList as $match){
+                            $i = 0;
+                            foreach($matchList["matches"] as $match){
+                                if($i == 20) break;
                                 $matchArr = $this->view->api->call('https://euw1.api.riotgames.com/lol/match/v4/matches/' . $match["gameId"]);
                                 $participants = '';
                                 $teamId = 0;
                                 $champId = 0;
                                 $myChampName = '';
-                                $win = false;
+                                $win = true;
                                 foreach($matchArr["participantIdentities"] as $participant){
                                     $championId = 0;
                                     $champName = "ZZZZ";
                                     foreach($matchArr["participants"] as $participantDetail){
-                                        if($participantDetail["participantId"] == $participant["participantId"] && $participant["player"]["summonerName"] == $summonerClean){
+                                        if(($participantDetail["participantId"] == $participant["participantId"]) && (strtolower($participant["player"]["summonerName"]) == strtolower($summonerClean))){
                                             $teamId = $participantDetail["teamId"];
-                                            $champId = $participantDetail["champId"];
+                                            $champId = $participantDetail["championId"];
+                                            break;
                                         }
+                                    }
+                                    foreach($matchArr["participants"] as $participantDetail){
                                         if($participantDetail["participantId"] == $participant["participantId"]){
                                             $championId = $participantDetail["championId"];
                                             break;
@@ -163,13 +167,12 @@ class IndexController extends Controller
                                             break;
                                         }
                                     }
-                                    $participants .= '<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $champName . '.png" width="16px" height="16px" alt="PARTICIPANT CHAMPION IMAGE"/> ' . $participant["summonerName"];
+                                    $participants .= '<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $champName . '.png" width="16px" height="16px" alt=" "/> ' . $participant["player"]["summonerName"];
                                 }
                                 foreach($matchArr["teams"] as $team){
                                     if($team["teamId"] == $teamId){
-                                        if($team["win"] == 'Win'){
-                                            $win = true;
-                                            break;
+                                        if($team["win"] === "Fail"){
+                                            $win = false;
                                         }
                                     }
                                 }
@@ -180,9 +183,8 @@ class IndexController extends Controller
 
 
                                 $now = time();
-                                $your_date = $matchArr["gameCreation"];
-                                $datediff = $now - $your_date;
-
+                                $gameDate = $matchArr["gameCreation"] / 1000;
+                                $datediff = $now - $gameDate;
                                 $days =  round($datediff / (60 * 60 * 24));
                                 $dayString = '<span class="text-muted">Today</span>';
                                 if($days > 0){
@@ -190,9 +192,10 @@ class IndexController extends Controller
                                 }
 
                                 $matchString = '<li class="list-group-item"><span class="text-warning">' . $matchArr["gameMode"] . '</span> ' . $dayString . ' ' . $winString . ' <span>
-                                    <img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $myChampName . '.png" width="16px" height="16px" alt="CHAMPION PLAYED IMAGE"/> ' . $arr["name"] . '</span>
+                                    <img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $myChampName . '.png" width="16px" height="16px" alt=" "/> ' . $arr["name"] . '</span>
                                             <span class="float-right">' . $participants . '</span></li>';
                                 echo $matchString;
+                                $i++;
                             }
                          echo '</ul>
                     </div>
