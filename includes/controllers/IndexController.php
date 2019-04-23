@@ -10,7 +10,7 @@ class IndexController extends Controller
 	public function run()
 	{
 		$this->view->title = 'LOL Stats';
-		$this->view->api = new ExternAPI('RGAPI-6cb84988-ad78-4a15-9275-308870e4a81a');
+		$this->view->api = new ExternAPI('RGAPI-c80bc0cf-fd65-40a8-8bf4-e747600be68c');
 
         if(isset($_POST['request'])){
             $output = array(
@@ -100,6 +100,11 @@ class IndexController extends Controller
                 } else {
                     $levelPic .= 'level175.png';
                 }
+
+                // Get Matchlist
+                $matchList = $this->view->api->call('https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/' . $arr["accountId"]);
+
+
                 //header('Content-type: application/json');
                 header("Access-Control-Allow-Origin: *");
                 echo '<div class="row profile">
@@ -127,19 +132,69 @@ class IndexController extends Controller
                 <div class="col-md-9">
                     <div class="profile-content">
                        <h5 class="pl-2 pt-2">Matchhistory:</h5>
-                       <ul class="list-group list-group-flush bg-loldark">
-                          <li class="list-group-item"><span class="text-warning">URF</span> <span class="text-muted">5 days ago</span> <span class="text-success">WIN</span> <span><img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/Ekko.png" width="16px" height="16px" alt="CHAMPION PLAYED IMAGE"/> ' . $arr["name"] . '</span> <span class="float-right"><img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/Ahri.png" width="16px" height="16px" alt="PARTICIPANT CHAMPION IMAGE"/> xZezzyx
-                          <img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/Annie.png" width="16px" height="16px" alt="PARTICIPANT CHAMPION IMAGE"/> xOnionx
-                          <img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/Braum.png" width="16px" height="16px" alt="PARTICIPANT CHAMPION IMAGE"/> MingaKoala
-                          <img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/Olaf.png" width="16px" height="16px" alt="PARTICIPANT CHAMPION IMAGE"/> Lord of Muck</span></li>
-                          <li class="list-group-item"><span class="text-warning">GameMode</span> <span class="text-muted">TIME</span> <span class="text-success">WIN</span>/<span class="text-danger">LOST</span> <span>CHAMPION PLAYED IMAGE</span> <span class="float-right">PARTICIPANTS</span></li>
-                          <li class="list-group-item"><span class="text-warning">GameMode</span> <span class="text-muted">TIME</span> <span class="text-success">WIN</span>/<span class="text-danger">LOST</span> <span>CHAMPION PLAYED IMAGE</span> <span class="float-right">PARTICIPANTS</span></li>
-                          <li class="list-group-item"><span class="text-warning">GameMode</span> <span class="text-muted">TIME</span> <span class="text-success">WIN</span>/<span class="text-danger">LOST</span> <span>CHAMPION PLAYED IMAGE</span> <span class="float-right">PARTICIPANTS</span></li>
-                          <li class="list-group-item"><span class="text-warning">GameMode</span> <span class="text-muted">TIME</span> <span class="text-success">WIN</span>/<span class="text-danger">LOST</span> <span>CHAMPION PLAYED IMAGE</span> <span class="float-right">PARTICIPANTS</span></li>
-                          <li class="list-group-item"><span class="text-warning">GameMode</span> <span class="text-muted">TIME</span> <span class="text-success">WIN</span>/<span class="text-danger">LOST</span> <span>CHAMPION PLAYED IMAGE</span> <span class="float-right">PARTICIPANTS</span></li>
-                          <li class="list-group-item"><span class="text-warning">GameMode</span> <span class="text-muted">TIME</span> <span class="text-success">WIN</span>/<span class="text-danger">LOST</span> <span>CHAMPION PLAYED IMAGE</span> <span class="float-right">PARTICIPANTS</span></li>
-                          <li class="list-group-item"><span class="text-warning">GameMode</span> <span class="text-muted">TIME</span> <span class="text-success">WIN</span>/<span class="text-danger">LOST</span> <span>CHAMPION PLAYED IMAGE</span> <span class="float-right">PARTICIPANTS</span></li>
-                       </ul>
+                       <ul class="list-group list-group-flush bg-loldark">';
+
+                            foreach($matchList as $match){
+                                $matchArr = $this->view->api->call('https://euw1.api.riotgames.com/lol/match/v4/matches/' . $match["gameId"]);
+                                $participants = '';
+                                $teamId = 0;
+                                $champId = 0;
+                                $myChampName = '';
+                                $win = false;
+                                foreach($matchArr["participantIdentities"] as $participant){
+                                    $championId = 0;
+                                    $champName = "ZZZZ";
+                                    foreach($matchArr["participants"] as $participantDetail){
+                                        if($participantDetail["participantId"] == $participant["participantId"] && $participant["player"]["summonerName"] == $summonerClean){
+                                            $teamId = $participantDetail["teamId"];
+                                            $champId = $participantDetail["champId"];
+                                        }
+                                        if($participantDetail["participantId"] == $participant["participantId"]){
+                                            $championId = $participantDetail["championId"];
+                                            break;
+                                        }
+                                    }
+                                    foreach ($champData["data"] as $champ) {
+                                        if($champ["key"] == $champId){
+                                            $myChampName = $champ["id"];
+                                        }
+                                        if ($champ["key"] == $championId) {
+                                            $champName = $champ["id"];
+                                            break;
+                                        }
+                                    }
+                                    $participants .= '<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $champName . '.png" width="16px" height="16px" alt="PARTICIPANT CHAMPION IMAGE"/> ' . $participant["summonerName"];
+                                }
+                                foreach($matchArr["teams"] as $team){
+                                    if($team["teamId"] == $teamId){
+                                        if($team["win"] == 'Win'){
+                                            $win = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                $winString = '<span class="text-success">WIN</span>';
+                                if(!$win){
+                                    $winString = '<span class="text-danger">LOST</span>';
+                                }
+
+
+                                $now = time();
+                                $your_date = $matchArr["gameCreation"];
+                                $datediff = $now - $your_date;
+
+                                $days =  round($datediff / (60 * 60 * 24));
+                                $dayString = '<span class="text-muted">Today</span>';
+                                if($days > 0){
+                                    $dayString = '<span class="text-muted">' . $days . ' days ago</span>';
+                                }
+
+                                $matchString = '<li class="list-group-item"><span class="text-warning">' . $matchArr["gameMode"] . '</span> ' . $dayString . ' ' . $winString . ' <span>
+                                    <img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $myChampName . '.png" width="16px" height="16px" alt="CHAMPION PLAYED IMAGE"/> ' . $arr["name"] . '</span>
+                                            <span class="float-right">' . $participants . '</span></li>';
+                                echo $matchString;
+                            }
+                         echo '</ul>
                     </div>
                 </div>
             </div>';
