@@ -14,13 +14,12 @@ html {
   padding-top: 10px;
   height: 300px;
   background-image: url("../../img/lolheader.jpg");
-  background-size: cover;
+  background-size: 100%;
   background-repeat: no-repeat;
-  background-position: center;
 }
 /* line 19, ../sass/screen.scss */
 .header-img .overlay {
-  position: absolute;
+  position: fixed;
   top: 240px;
   left: 50%;
   width: 700px;
@@ -60,6 +59,7 @@ html {
   background-clip: padding-box;
   border: solid;
   border-radius: initial;
+  padding-top: 15%;
 }
 
 /* line 62, ../sass/screen.scss */
@@ -273,15 +273,12 @@ h3::after {
 .bg-loldark {
   max-height: 100%;
   overflow-y: scroll;
+  height: 400px;
 }
 
 .bg-loldark .list-group-item {
   cursor: pointer;
   transition: font-size .5s ease-in-out;
-}
-
-.bg-loldark .list-group-item:hover {
-  font-size: 15pt;
 }
 
 .bg-loldark li {
@@ -307,7 +304,7 @@ h3::after {
   border-top: 2px solid #c7b184;
   background-color: #303840;
   width: 100%;
-  top: 300px;
+  top: 0px;
   bottom: 100px;
   padding-bottom: 100px;
   z-index: -1;
@@ -317,6 +314,23 @@ h3::after {
   padding-top: 90px;
   padding-left: 50px;
   padding-right: 50px;
+  overflow-y: scroll;
+  scrollbar-color: #c7b184 transparent ;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c7b184;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #72542a;
 }
 /* line 283, ../sass/screen.scss */
 #stats .info {

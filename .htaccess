@@ -2,7 +2,7 @@
   RewriteEngine On
 
   #adapt this following line to your path if necessary
-  RewriteBase /lolstats
+  RewriteBase /Projekt-LOL
 
   ##
   # Change the RewriteBase if your project is in a subdirectoy and
