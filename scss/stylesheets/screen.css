@@ -59,7 +59,7 @@ html {
   background-clip: padding-box;
   border: solid;
   border-radius: initial;
-  padding-top: 15%;
+  padding-top: 3%;
 }
 
 /* line 62, ../sass/screen.scss */
@@ -311,7 +311,8 @@ h3::after {
 }
 /* line 278, ../sass/screen.scss */
 #stats .row {
-  padding-top: 90px;
+  position: static;
+  padding-top: 30%;
   padding-left: 50px;
   padding-right: 50px;
   overflow-y: scroll;
@@ -339,7 +340,7 @@ h3::after {
 
 /* line 288, ../sass/screen.scss */
 footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   height: 100px;
   width: 100%;
