@@ -11,7 +11,7 @@ class MatchHistoryModel{
 
         if($db->numRows($result) > 0)
         {
-            return $db->fetchObject($result);
+            return $db->fetchArray($result);
         }
 
         return null;

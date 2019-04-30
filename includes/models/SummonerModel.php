@@ -18,7 +18,7 @@ class SummonerModel
 
         if($db->numRows($result) > 0)
         {
-            return $db->fetchObject($result);
+            return $db->fetchArray($result);
         }
 
         return null;
@@ -27,13 +27,13 @@ class SummonerModel
     public static function getSummonerByName($name)
     {
         $db = new Database();
-        $sql = "SELECT * FROM Summoner WHERE name=".$db->escapeString($name);
+        $sql = "SELECT * FROM Summoner WHERE summonerName=".$db->escapeString($name);
 
         $result = $db->query($sql);
 
         if($db->numRows($result) > 0)
         {
-            return $db->fetchObject($result);
+            return $db->fetchArray($result);
         }
 
         return null;
@@ -44,23 +44,22 @@ class SummonerModel
     {
         $db = new Database();
 
-        $sql = "insert into Summoner values(
-                  ".$db->escapeString($data['profileIconId']).",
+        $sql = " insert into Summoner values(
+                  ".intval($data['profileIconId']).",
                   '".$db->escapeString($data['name'])."',
                   '".$db->escapeString($data['puuid'])."',
-                  ".$db->escapeString($data['summonerLevel']).",
-                  ".$db->escapeString($data['revisionDate']).",
+                  ".$db->intval($data['summonerLevel']).",
+                  ".$db->intval($data['revisionDate']).",
                   '".$db->escapeString($data['id'])."',
                   '".$db->escapeString($data['accountId'])."')
-                  on duplicate key update Summoner set 
-                  name='".$db->escapeString($data['name'])."',
-                  proficeIconId=".$db->escapeString($data['profileIconId']).",
-                  summonerLevel = ".$db->escapeString($data['summonerLevel']).",
-                  revisionDate = ".$db->escapeString($data['revisionDate'])." 
-                  where accountId = '".$db->escapeString($data['accountId'])."'";
+                  on duplicate key update Summoner
+                  summonerName='".$db->escapeString($data['name'])."',
+                  profileIconId=".intval($data['profileIconId']).",
+                  summonerLevel = ".intval($data['summonerLevel']).",
+                  revisionDate = ".intval($data['revisionDate'])
+
         $db->query($sql);
 
-        return (object) $data; //wüsste nicht für was man das return benötigen könnte
     }
 
 }
