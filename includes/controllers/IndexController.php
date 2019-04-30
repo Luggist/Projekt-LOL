@@ -12,6 +12,9 @@ class IndexController extends Controller
 		$this->view->title = 'LOL Stats';
 		$this->view->api = new ExternAPI('RGAPI-c6b2b8d0-31d3-4aee-a741-c410b168029c');
 
+		if(isset($_GET['logout'])){
+		    $this->user->isLoggedIn = false;
+        }
         if(isset($_POST['request'])){
             $output = array(
                 "state" => false,

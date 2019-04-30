@@ -71,7 +71,7 @@
                 alert('Ihre Accounts werden nun restlos gelöscht!');
                 $('body').html('');
                 $('body').append('<p>Die Accounts wurden alle gelöscht! Gratulation!</p>');
-                $('body').append('<a href="" onclick="window.reload">Nochmal spielen?</a>');
+                $('body').append('<a href="" onclick="window.reload">Nochmal spielen?</a> oder <a href="/lolstats/index?logout">Ausloggen</a>');
             }
         }
     });
@@ -235,7 +235,7 @@
             alert('Ihre Accounts werden nun restlos gelöscht!');
             $('body').html('');
             $('body').append('<p>Die Accounts wurden alle gelöscht! Gratulation!</p>');
-            $('body').append('<a href="" onclick="window.reload">Nochmal spielen?</a>');
+            $('body').append('<a href="" onclick="window.reload">Nochmal spielen?</a> oder <a href="/lolstats/index?logout">Ausloggen</a>');
         }
     });
 
