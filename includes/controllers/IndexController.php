@@ -10,7 +10,7 @@ class IndexController extends Controller
 	public function run()
 	{
 		$this->view->title = 'LOL Stats';
-		$this->view->api = new ExternAPI('RGAPI-c6b2b8d0-31d3-4aee-a741-c410b168029c');
+		$this->view->api = new ExternAPI('RGAPI-9c476dd8-f706-4fc6-9661-31bf2bcd6b21');
 
 		if(isset($_GET['logout'])){
 		    $this->user->isLoggedIn = false;
