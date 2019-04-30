@@ -10,7 +10,7 @@ class IndexController extends Controller
 	public function run()
 	{
 		$this->view->title = 'LOL Stats';
-		$this->view->api = new ExternAPI('RGAPI-c80bc0cf-fd65-40a8-8bf4-e747600be68c');
+		$this->view->api = new ExternAPI('RGAPI-9c476dd8-f706-4fc6-9661-31bf2bcd6b21');
 
         if(isset($_POST['request'])){
             $output = array(
@@ -56,6 +56,7 @@ class IndexController extends Controller
                         $row = $stmt->fetch(PDO::FETCH_ASSOC);
                         if(md5($password) == $row['password']){
                             $output['state'] = true;
+                            $this->user->isLoggedIn = true;
                         } else {
                             $output['output'] = 'Benutzername oder Passwort ist falsch!';
                         }
@@ -72,6 +73,15 @@ class IndexController extends Controller
                 $summonerClean = $_POST['summoner'];
                 $summoner = str_replace(' ', '%20', $summonerClean);
                 $arr = $this->view->api->call('https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/' . $summoner);
+                if($arr["id"] == null){
+                    header('Content-type: application/json');
+                    $output = array(
+                        "state" => "error",
+                        "output" => "Summoner existiert nicht"
+                    );
+                    echo json_encode($output);
+                    exit;
+                }
                 $champMastery = $this->view->api->call('https://euw1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/' . $arr["id"]);
                 $champData = json_decode(file_get_contents('http://ddragon.leagueoflegends.com/cdn/6.24.1/data/de_DE/champion.json'), true);
                 $champMasteryName = '';
@@ -122,7 +132,7 @@ class IndexController extends Controller
                             <div class="profile-usertitle-name">
                                 ' . $arr["name"] . '
                             </div>
-                            <div class="profile-usertitle-level">
+                            <div class="profile-usertitle-level"> 
                                 ' . $arr["summonerLevel"] . '
                             </div>
                         </div>
@@ -133,22 +143,26 @@ class IndexController extends Controller
                     <div class="profile-content">
                        <h5 class="pl-2 pt-2">Matchhistory:</h5>
                        <ul class="list-group list-group-flush bg-loldark">';
-
-                            foreach($matchList as $match){
+                            $i = 0;
+                            foreach($matchList["matches"] as $match){
+                                if($i == 20) break;
                                 $matchArr = $this->view->api->call('https://euw1.api.riotgames.com/lol/match/v4/matches/' . $match["gameId"]);
                                 $participants = '';
                                 $teamId = 0;
                                 $champId = 0;
                                 $myChampName = '';
-                                $win = false;
+                                $win = true;
                                 foreach($matchArr["participantIdentities"] as $participant){
                                     $championId = 0;
                                     $champName = "ZZZZ";
                                     foreach($matchArr["participants"] as $participantDetail){
-                                        if($participantDetail["participantId"] == $participant["participantId"] && $participant["player"]["summonerName"] == $summonerClean){
+                                        if(($participantDetail["participantId"] == $participant["participantId"]) && (strtolower($participant["player"]["summonerName"]) == strtolower($summonerClean))){
                                             $teamId = $participantDetail["teamId"];
-                                            $champId = $participantDetail["champId"];
+                                            $champId = $participantDetail["championId"];
+                                            break;
                                         }
+                                    }
+                                    foreach($matchArr["participants"] as $participantDetail){
                                         if($participantDetail["participantId"] == $participant["participantId"]){
                                             $championId = $participantDetail["championId"];
                                             break;
@@ -163,13 +177,12 @@ class IndexController extends Controller
                                             break;
                                         }
                                     }
-                                    $participants .= '<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $champName . '.png" width="16px" height="16px" alt="PARTICIPANT CHAMPION IMAGE"/> ' . $participant["summonerName"];
+                                    $participants .= '<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $champName . '.png" width="16px" height="16px" alt=" "/> ' . $participant["player"]["summonerName"];
                                 }
                                 foreach($matchArr["teams"] as $team){
                                     if($team["teamId"] == $teamId){
-                                        if($team["win"] == 'Win'){
-                                            $win = true;
-                                            break;
+                                        if($team["win"] === "Fail"){
+                                            $win = false;
                                         }
                                     }
                                 }
@@ -180,9 +193,8 @@ class IndexController extends Controller
 
 
                                 $now = time();
-                                $your_date = $matchArr["gameCreation"];
-                                $datediff = $now - $your_date;
-
+                                $gameDate = $matchArr["gameCreation"] / 1000;
+                                $datediff = $now - $gameDate;
                                 $days =  round($datediff / (60 * 60 * 24));
                                 $dayString = '<span class="text-muted">Today</span>';
                                 if($days > 0){
@@ -190,9 +202,10 @@ class IndexController extends Controller
                                 }
 
                                 $matchString = '<li class="list-group-item"><span class="text-warning">' . $matchArr["gameMode"] . '</span> ' . $dayString . ' ' . $winString . ' <span>
-                                    <img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $myChampName . '.png" width="16px" height="16px" alt="CHAMPION PLAYED IMAGE"/> ' . $arr["name"] . '</span>
+                                    <img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $myChampName . '.png" width="16px" height="16px" alt=" "/> ' . $arr["name"] . '</span>
                                             <span class="float-right">' . $participants . '</span></li>';
                                 echo $matchString;
+                                $i++;
                             }
                          echo '</ul>
                     </div>

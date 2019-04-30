@@ -2,17 +2,17 @@
 html {
   font-family: 'Lato', sans-serif;
 }
-
+body{
+  background: #303840;
+}
 /* line 6, ../sass/screen.scss */
 .header-img {
   max-width: 100%;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 10px;
-  height: 450px;
+  padding-top: 9px;
+  height: auto;
   background-image: url("../../img/lolheader.jpg");
   background-size: 100%;
   background-repeat: no-repeat;
@@ -62,6 +62,7 @@ html {
   border-radius: initial;
   top: 25%;
   padding-left:0px;
+  position: ;
 }
 
 /* line 62, ../sass/screen.scss */
@@ -186,16 +187,12 @@ h3::after {
   position: fixed;
   min-width: 100%;
   z-index: 10;
-  top: 300px;
-  bottom: 100px;
-  border-top: 2px solid #c7b184;
-  background-color: #303840;
 }
 
 /* Profile sidebar */
 /* line 182, ../sass/screen.scss */
 .profile-sidebar {
-  padding: 20px 0 10px 0;
+  padding: 35px 0 10px 0;
   z-index: 15;
   position: absolute;
   width: 100%;
@@ -299,22 +296,10 @@ h3::after {
   position: absolute;
 }
 
-/* line 268, ../sass/screen.scss */
-#stats {
-  position: absolute;
-  color: #f0e6d2;
-  border-top: 2px solid #c7b184;
-  background-color: #303840;
-  width: 100%;
-  top: 1%;
-  bottom: 100px;
-  padding-bottom: 100px;
-  z-index: -1;
-}
 /* line 278, ../sass/screen.scss */
 #stats .row {
   position: static;
-  padding-top: 30%;
+  padding-top: 2%;
   padding-left: 50px;
   padding-right: 50px;
   overflow-y: scroll;
@@ -353,6 +338,7 @@ footer {
   justify-content: center;
   align-items: center;
   border-top: 2px solid #c7b184;
+  z-index: 1000;
 }
 
 /* line 302, ../sass/screen.scss */
@@ -377,4 +363,5 @@ footer {
 /* line 318, ../sass/screen.scss */
 .row {
   margin-right: 0 !important;
+  margin-left: 0 !important;
 }
