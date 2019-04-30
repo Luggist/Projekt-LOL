@@ -11,12 +11,13 @@ class MatchHistoryModel{
 
         if($db->numRows($result) > 0)
         {
+
             $resultArray = array();
+
             while($row = $db->fetchAssoc($result))
             {
-            $resultArray[]=$row;
+                $resultArray[] = $row;
             }
-
             return $resultArray;
         }
 
@@ -38,15 +39,14 @@ class MatchHistoryModel{
 
         $sql = "insert into MatchHistory values(
                 '".$db->escapeString($data['lane'])."',
-                ".$data['gameId'].",
-                ".intval($data['champion']).",
+                '".$db->escapeString($data['gameId'])."',
+                '".$db->escapeString($data['champion'])."',
                 '".$db->escapeString($data['platformId'])."',
-                ".intval($data['season']).",
-                ".intval($data['queue']).",
+                '".$db->escapeString($data['season'])."',
+                '".$db->escapeString($data['queue'])."',
                 '".$db->escapeString($data['role'])."',
-                ".$data['timestamp'].",
-                '".$db->escapeString($accountId)."'
-                )";
+                '".$db->escapeString($data['timestamp'])."',
+                '".$db->escapeString($accountId)."')";
         $db->query($sql);
 
     return false;

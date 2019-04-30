@@ -233,9 +233,6 @@ class IndexController extends Controller
                             MatchHistoryModel::createNewMatchHistory($match, $arr["accountId"]);
                         }
                         $matchList = $matchListDb;
-                        echo '<pre>';
-                        var_dump($matchList);
-                        echo '</pre>';
 
                         //header('Content-type: application/json');
                         header("Access-Control-Allow-Origin: *");

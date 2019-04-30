@@ -55,7 +55,7 @@ class SummonerLeagueModel
 
         if($db->numRows($result) > 0)
         {
-            return $db->fetchArray($result);
+            return $db->fetchAssoc($result);
         }
 
         return null;
@@ -70,7 +70,7 @@ class SummonerLeagueModel
 
         if($db->numRows($result) > 0)
         {
-            return $db->fetchArray($result);
+            return $db->fetchAssoc($result);
         }
 
         return null;
