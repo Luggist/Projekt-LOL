@@ -11,7 +11,7 @@ class MatchesModel
     public static function createNewMatches($data) //updates summoner, if summoner doesn't exist create one
     {
         $db = new Database();
-        $sql = "select * from Matches where gameId = '" . $db->escapeString($data['gameId']) . "'";
+        $sql = "select * from Matches where gameId = '" . $data['gameId'] . "'";
         $result = $db->query($sql);
 
         if($db->numRows($result) > 0)
@@ -40,7 +40,7 @@ class MatchesModel
     public static function getMatchesByGameId($gameId)
     {
         $db = new Database();
-        $sql = "SELECT * FROM Matches WHERE gameId=".intval($gameId);
+        $sql = "SELECT * FROM Matches WHERE gameId=".$gameId;
 
         $result = $db->query($sql);
 
