@@ -10,11 +10,11 @@ class CreateTablesModel
 {
     public static function createTables(){
         $db = new Database();
-        $sql = "create table Summoner(profileIconId int,name varchar(50) Primary Key,puuid varchar(78), summonerLevel bigint,revisionDate bigint, id varchar(63), accountId varchar(56)),
-                create table MatchHistory(lane varchar(20), gameId bigint,champion int,platformId varchar, season int, queue int, role varchar, timestamp bigint, accountId varchar(56)),
-                create table SummonerLeague(queueType varchar(), summonerName, varchar, hotStreak varchar, wins int, veteran boolean, losses int, rank varchar(), leagueId varchar(), inactive boolean, freshBlood boolean, tier varchar(), summonerId varchar(),leaguePoints int),
-                create table MiniSeries(progress varchar(),losses int, target int, wins int)
-        ";
+        $sql = "create table Summoner(profileIconId int,name varchar(50) Primary Key,puuid varchar(78), summonerLevel bigint,revisionDate bigint, id varchar(63), accountId varchar(56))";
+        $db->query($sql);
+        $sql = "create table MatchHistory(lane varchar(20), gameId bigint Primary Key,champion int,platformId varchar(30), season int, queue int, role varchar(30), timestamp bigint, accountId varchar(56))";
+        $db->query($sql);
+        $sql = "create table SummonerLeague(queueType varchar(30), summonerName varchar(100) Primary Key, hotStreak boolean, wins int, veteran boolean, losses int, rank varchar(30), leagueId varchar(40), inactive boolean, freshBlood boolean, tier varchar(10), summonerId varchar(63),leaguePoints int)";
         $db->query($sql);
     }
 }
