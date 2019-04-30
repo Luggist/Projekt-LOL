@@ -24,23 +24,18 @@
 <main role="main" class="fluid-container">
     <div class="header-img">
         <div class="overlay">
-            <input id="summonerInput" class="form-control rounded-0" placeholder="Summonername" autofocus>
-
-            <!--<div class="hr-gold"><h3>OR</h3></div>-->
-            <button id="searchBtn" class="c-btn btn-block rounded-0 pb-2" onclick="searchSummoner()">S E A R C H</button><br><br>
-            <div class="hr-gold"><h3>OR</h3></div>
-            <button id="loginBtn" class="c-btn btn-block rounded-0" onclick="goToLoginPage()">L O G I N - R E G I S T E R</button><br><br>
-            <!--<div id="loginRegister">
+            <div id="loginRegister">
                 <input class="form-control" type="hidden">
                 <input id="username" class="form-control d-none" type="text" placeholder="Benutzername">
                 <input id="password" class="form-control d-none" type="password" placeholder="Passwort">
-                <button id="loginBtn" class="c-btn btn-block rounded-0" onclick="login(this)">L O G I N</button><br><br>
+                <button id="loginBtn" class="c-btn btn-block rounded-0" onclick="login(this)">L O G I N</button><br><br><br>
+                <div class="hr-gold"><h3>OR</h3></div>
                 <input id="usernameR" class="form-control d-none" type="text" placeholder="Benutzername">
                 <input id="passwordR" class="form-control d-none" type="password" placeholder="Passwort">
                 <input id="passwordR2" class="form-control d-none" type="password" placeholder="Passwort wiederholen">
                 <button id="registerBtn" class="c-btn btn-block rounded-0" onclick="register(this)">R E G I S T E R</button>
                 <div id="response" class="error"></div>
-            </div>-->
+            </div>
         </div>
     </div>
     <div id="stats">
@@ -60,10 +55,6 @@
             searchSummoner();
         }
     });
-
-    function goToLoginPage() {
-        window.location = '/lolstats/login';
-    }
 
     function searchSummoner(){
 
