@@ -357,3 +357,13 @@ footer {
   margin-right: 0 !important;
   margin-left: 0 !important;
 }
+
+@media only screen and (max-width:450px){
+    .header-img .overlay{
+      width:110%;
+      padding: 40px;
+      padding-right: 60px;
+
+}
+
+}

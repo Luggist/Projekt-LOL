@@ -104,14 +104,14 @@
                     $('.header-img .overlay').css('top', '302px');
                     $('.header-img .overlay').css('border', '0');
                     $('.header-img .overlay').css('justify-content', 'flex-start');
-                    $('.header-img .overlay input').css('margin-right', '50px');
+                    $('.header-img .overlay input').css('margin-right', '15px');
                     $('.header-img .overlay').css('border-bottom', '2px solid #c7b184');
                     $('.header-img .overlay').css('border-top', '2px solid #c7b184');
                     $('.header-img .overlay input').css('height', '50px');
                     $('.header-img .overlay input').css('margin-bottom', '0');
-                    $('.header-img .overlay input').css('max-width', '25%');
+                    $('.header-img .overlay input').css('max-width', '50%');
                     $('.header-img .overlay input').css('float', 'left');
-                    $('.header-img .overlay input').css('margin-left', '100px');
+                    $('.header-img .overlay input').css('margin-left', '10px');
                     $('#loginRegister').css('display', 'flex');
                     $('#loginRegister').css('flex-direction', 'row');
                     $('#loginBtn').css('display', 'none');
