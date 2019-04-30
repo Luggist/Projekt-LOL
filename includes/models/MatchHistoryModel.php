@@ -40,10 +40,10 @@ class MatchHistoryModel{
         $sql = "insert into MatchHistory values(
                 '".$db->escapeString($data['lane'])."',
                 '".$db->escapeString($data['gameId'])."',
-                '".$db->escapeString($data['champion'])."',
+                '".intval($data['champion'])."',
                 '".$db->escapeString($data['platformId'])."',
-                '".$db->escapeString($data['season'])."',
-                '".$db->escapeString($data['queue'])."',
+                '".intval($data['season'])."',
+                '".intval($data['queue'])."',
                 '".$db->escapeString($data['role'])."',
                 '".$db->escapeString($data['timestamp'])."',
                 '".$db->escapeString($accountId)."')";

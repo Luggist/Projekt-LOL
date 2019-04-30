@@ -27,7 +27,7 @@ class SummonerModel
     public static function getSummonerByName($name)
     {
         $db = new Database();
-        $sql = "SELECT * FROM Summoner WHERE summonerName=".intval($name);
+        $sql = "SELECT * FROM Summoner WHERE summonerName='".$db->escapeString($name) . "'";
 
         $result = $db->query($sql);
 
@@ -46,17 +46,16 @@ class SummonerModel
         $db = new Database();
         $sql = "select * from Summoner where accountId = '" . $db->escapeString($data['accountId'])."'";
         $sqlUpdate = "update Summoner set 
-                  summonerName='".$db->escapeString($data['name'])."',
                   profileIconId=".intval($data['profileIconId']).",
                   summonerLevel = ".intval($data['summonerLevel']).",
                   revisionDate = ".intval($data['revisionDate'])." 
                   where accountId = '".$db->escapeString($data['accountId'])."'";
         $sqlInsert = "insert into Summoner values(
-                  ".$db->escapeString($data['profileIconId']).",
+                  ".intval($data['profileIconId']).",
                   '".$db->escapeString($data['name'])."',
                   '".$db->escapeString($data['puuid'])."',
-                  ".$db->escapeString($data['summonerLevel']).",
-                  ".$db->escapeString($data['revisionDate']).",
+                  ".intval($data['summonerLevel']).",
+                  ".intval($data['revisionDate']).",
                   '".$db->escapeString($data['id'])."',
                   '".$db->escapeString($data['accountId'])."')";
         $result = $db->query($sql);

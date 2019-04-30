@@ -86,11 +86,11 @@ class IndexController extends Controller
                     echo json_encode($output);
                     exit;
                 }
-                SummonerModel::createNewSummoner($arr);
                 $summonerDb = SummonerModel::getSummonerByName($summonerClean);
                 if($summonerDb != null) {
                     $arr = $summonerDb;
                 }
+                SummonerModel::createNewSummoner($arr);
                     $champMastery = $this->view->api->call('https://euw1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/' . $arr["id"]);
                     $champData = json_decode(file_get_contents('http://ddragon.leagueoflegends.com/cdn/6.24.1/data/de_DE/champion.json'), true);
                     $champMasteryName = '';
@@ -160,7 +160,12 @@ class IndexController extends Controller
                         $i = 0;
                         foreach ($matchList["matches"] as $match) {
                             if ($i == 20) break;
-                            $matchArr = $this->view->api->call('https://euw1.api.riotgames.com/lol/match/v4/matches/' . $match["gameId"]);
+                            $matchArrDb = MatchesModel::getMatchesByGameId($match["gameId"]);
+                            $matchArr = $matchArrDb;
+                            if($matchArr == null){
+                                $matchArr = $this->view->api->call('https://euw1.api.riotgames.com/lol/match/v4/matches/' . $match["gameId"]);
+                                MatchesModel::createNewMatches($matchArr);
+                            }
                             $participants = '';
                             $teamId = 0;
                             $champId = 0;
@@ -269,7 +274,11 @@ class IndexController extends Controller
                         $i = 0;
                         foreach ($matchList as $match) {
                             if ($i == 20) break;
-                            $matchArr = $this->view->api->call('https://euw1.api.riotgames.com/lol/match/v4/matches/' . $match["gameId"]);
+                            $matchArrDb = MatchesModel::getMatchesByGameId($match["gameId"]);
+                            $matchArr = $matchArrDb;
+                            if($matchArr == null){
+                                $matchArr = $this->view->api->call('https://euw1.api.riotgames.com/lol/match/v4/matches/' . $match["gameId"]);
+                            }
                             if($matchArr == null) continue;
                             $participants = '';
                             $teamId = 0;

@@ -23,16 +23,16 @@ class MatchesModel
                   " . intval($data['seasonId']) . ",
                   " . intval($data['queueId']) . ",
                   " . $data['gameId'] . ",
-                  '" . $data['participantIdentities'] . "',
+                  '" . $db->escapeString(json_encode($data['participantIdentities'])) . "',
                   '" . $db->escapeString($data['gameVersion']) . "',
                   '" . $db->escapeString($data['platformId']) . "',
                   '" . $db->escapeString($data['gameMode']) . "',
                   " . intval($data['mapId']) . ",
                   '" . $db->escapeString($data['gameType']) . "',
-                  '" . $data['teams'] . "',
-                  '" . $data['participants'] . "',
+                  '" . $db->escapeString(json_encode($data['teams'])) . "',
+                  '" . $db->escapeString(json_encode($data['participants'])) . "',
                   " . $data['gameDuration'] . ",
-                  " . $data['gameCreation'] . ",
+                  " . $data['gameCreation'] . "
                   )";
         $db->query($sql);
     }
