@@ -11,17 +11,18 @@ html {
   padding-left: 10px;
   padding-right: 10px;
   padding-top: 10px;
-  height: 300px;
+  height: 450px;
   background-image: url("../../img/lolheader.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   .overlay {
-    position: absolute;
+    position: static;
     top: 240px;
     left: 50%;
     width: 700px;
-    margin-left: -350px;
+    margin-left: auto;
+    margin-right: auto;
     background-color: #1e2328;
     padding: 40px 60px;
     display: flex;
@@ -271,12 +272,12 @@ h3::after {
   border-top: 2px solid #c7b184;
   background-color: #303840;
   width: 100%;
-  top: 300px;
+  top: 1%;
   bottom: 100px;
   padding-bottom:100px;
   z-index: -1;
   .row {
-    padding-top: 90px;
+    padding-top: 25%;
     padding-left: 50px;
     padding-right: 50px;
   }
@@ -286,7 +287,7 @@ h3::after {
 }
 
 footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   height: 100px;
   width: 100%;
