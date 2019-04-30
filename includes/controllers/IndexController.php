@@ -10,7 +10,7 @@ class IndexController extends Controller
 	public function run()
 	{
 		$this->view->title = 'LOL Stats';
-		$this->view->api = new ExternAPI('RGAPI-c80bc0cf-fd65-40a8-8bf4-e747600be68c');
+		$this->view->api = new ExternAPI('RGAPI-c6b2b8d0-31d3-4aee-a741-c410b168029c');
 
         if(isset($_POST['request'])){
             $output = array(
@@ -56,6 +56,7 @@ class IndexController extends Controller
                         $row = $stmt->fetch(PDO::FETCH_ASSOC);
                         if(md5($password) == $row['password']){
                             $output['state'] = true;
+                            $this->user->isLoggedIn = true;
                         } else {
                             $output['output'] = 'Benutzername oder Passwort ist falsch!';
                         }
@@ -72,6 +73,15 @@ class IndexController extends Controller
                 $summonerClean = $_POST['summoner'];
                 $summoner = str_replace(' ', '%20', $summonerClean);
                 $arr = $this->view->api->call('https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/' . $summoner);
+                if($arr["id"] == null){
+                    header('Content-type: application/json');
+                    $output = array(
+                        "state" => "error",
+                        "output" => "Summoner existiert nicht"
+                    );
+                    echo json_encode($output);
+                    exit;
+                }
                 $champMastery = $this->view->api->call('https://euw1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/' . $arr["id"]);
                 $champData = json_decode(file_get_contents('http://ddragon.leagueoflegends.com/cdn/6.24.1/data/de_DE/champion.json'), true);
                 $champMasteryName = '';
@@ -122,7 +132,7 @@ class IndexController extends Controller
                             <div class="profile-usertitle-name">
                                 ' . $arr["name"] . '
                             </div>
-                            <div class="profile-usertitle-level">
+                            <div class="profile-usertitle-level"> 
                                 ' . $arr["summonerLevel"] . '
                             </div>
                         </div>

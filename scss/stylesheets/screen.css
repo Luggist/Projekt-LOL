@@ -278,7 +278,6 @@ h3::after {
 
 .bg-loldark .list-group-item {
   cursor: pointer;
-  transition: font-size .5s ease-in-out;
 }
 
 .bg-loldark li {
