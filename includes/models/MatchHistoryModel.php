@@ -5,13 +5,19 @@ class MatchHistoryModel{
     public static function getMatchHistoryByAccountId($accountId)
     {
         $db = new Database();
-        $sql = "SELECT * FROM Summoner WHERE accountId='".$db->escapeString($accountId). "'";
+        $sql = "SELECT * FROM MatchHistory WHERE accountId='".$db->escapeString($accountId). "'";
 
         $result = $db->query($sql);
 
         if($db->numRows($result) > 0)
         {
-            return $db->fetchArray($result);
+            $resultArray = array();
+            while($row = $db->fetchAssoc($result))
+            {
+            $resultArray[]=$row;
+            }
+
+            return $resultArray;
         }
 
         return null;
@@ -32,14 +38,15 @@ class MatchHistoryModel{
 
         $sql = "insert into MatchHistory values(
                 '".$db->escapeString($data['lane'])."',
-                '".$db->escapeString($data['gameId'])."',
-                '".$db->escapeString($data['champion'])."',
+                ".$data['gameId'].",
+                ".intval($data['champion']).",
                 '".$db->escapeString($data['platformId'])."',
-                '".$db->escapeString($data['season'])."',
-                '".$db->escapeString($data['queue'])."',
+                ".intval($data['season']).",
+                ".intval($data['queue']).",
                 '".$db->escapeString($data['role'])."',
-                '".$db->escapeString($data['timestamp'])."',
-                '".$db->escapeString($accountId)."')";
+                ".$data['timestamp'].",
+                '".$db->escapeString($accountId)."'
+                )";
         $db->query($sql);
 
     return false;

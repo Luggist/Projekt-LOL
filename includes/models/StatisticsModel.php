@@ -10,7 +10,7 @@ class StatisticsModel
 {
     public static function GetSumChampPlayedBySummonerName($summonerName){
         $db = new Database();
-        $sql = "SELECT * FROM Summoner WHERE id=".intval($summonerName);
+        $sql = "select count() from MatchHistory";
 
         $result = $db->query($sql);
 
@@ -21,6 +21,7 @@ class StatisticsModel
 
         return null;
     }
+
     public static function GetSumRolePlayedBySummonerName(){
 
     }
