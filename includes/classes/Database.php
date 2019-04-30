@@ -75,6 +75,21 @@ class Database
 		return $result;
 	}
 
+	public function multiQuery($sql)
+    {
+        $result = mysqli_multi_query($this->conn, $sql);
+
+        if ($result == false)
+        {
+            echo "<b>Fatal Error!</b> MySQL-Error (".mysqli_errno($this->conn)."): ".mysqli_error($this->conn);
+            echo "<br><br>Query:<br>\n";
+            echo $sql."\n<br>";
+            die();
+        }
+
+        return $result;
+    }
+
 	/**
 	 * Fetches one Row of the Resultset as Object (if there is still a row)
 	 * @param $result
