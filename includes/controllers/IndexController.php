@@ -215,8 +215,12 @@ class IndexController extends Controller
                                 $dayString = '<span class="text-muted">' . $days . ' days ago</span>';
                             }
 
+                            $sumName = $arr["name"];
+                            if($sumName == null){
+                                $sumName = $arr["summonerName"];
+                            }
                             $matchString = '<li class="list-group-item"><span class="text-warning">' . $matchArr["gameMode"] . '</span> ' . $dayString . ' ' . $winString . ' <span>
-                                    <img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $myChampName . '.png" width="16px" height="16px" alt=" "/> ' . $arr["name"] . '</span>
+                                    <img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $myChampName . '.png" width="16px" height="16px" alt=" "/> ' . $sumName . '</span>
                                             <span class="float-right">' . $participants . '</span></li>';
                             echo $matchString;
                             $i++;
@@ -266,6 +270,7 @@ class IndexController extends Controller
                         foreach ($matchList as $match) {
                             if ($i == 20) break;
                             $matchArr = $this->view->api->call('https://euw1.api.riotgames.com/lol/match/v4/matches/' . $match["gameId"]);
+                            if($matchArr == null) continue;
                             $participants = '';
                             $teamId = 0;
                             $champId = 0;
@@ -319,9 +324,12 @@ class IndexController extends Controller
                             if ($days > 0) {
                                 $dayString = '<span class="text-muted">' . $days . ' days ago</span>';
                             }
-
+                            $sumName = $arr["name"];
+                            if($sumName == null){
+                                $sumName = $arr["summonerName"];
+                            }
                             $matchString = '<li class="list-group-item"><span class="text-warning">' . $matchArr["gameMode"] . '</span> ' . $dayString . ' ' . $winString . ' <span>
-                                    <img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $myChampName . '.png" width="16px" height="16px" alt=" "/> ' . $arr["name"] . '</span>
+                                    <img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $myChampName . '.png" width="16px" height="16px" alt=" "/> ' . $sumName . '</span>
                                             <span class="float-right">' . $participants . '</span></li>';
                             echo $matchString;
                             $i++;
