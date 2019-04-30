@@ -100,7 +100,7 @@
                     $('.header-img .overlay').css('flex-direction', 'row');
                     $('.header-img .overlay').css('margin-left', '0');
                     $('.header-img .overlay').css('height', '80px');
-                    $('.header-img .overlay').css('width', '100vw');
+                    $('.header-img .overlay').css('width', '100%');
                     $('.header-img .overlay').css('top', '302px');
                     $('.header-img .overlay').css('border', '0');
                     $('.header-img .overlay').css('justify-content', 'flex-start');
