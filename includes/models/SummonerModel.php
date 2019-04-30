@@ -18,7 +18,7 @@ class SummonerModel
 
         if($db->numRows($result) > 0)
         {
-            return $db->fetchArray($result);
+            return $db->fetchAssoc($result);
         }
 
         return null;
@@ -33,7 +33,8 @@ class SummonerModel
 
         if($db->numRows($result) > 0)
         {
-            return $db->fetchArray($result);
+
+            return $db->fetchAssoc($result);
         }
 
         return null;
@@ -43,7 +44,6 @@ class SummonerModel
     public static function createNewSummoner($data) //updates summoner, if summoner doesn't exist create one
     {
         $db = new Database();
-        /*
         $sql = "select * from Summoner where accountId = '" . $db->escapeString($data['accountId'])."'";
         $sqlUpdate = "update Summoner set 
                   summonerName='".$db->escapeString($data['name'])."',
@@ -65,7 +65,7 @@ class SummonerModel
         } else {
             $db->query($sqlInsert);
         }
-        */
+        /*
         $sql = "insert into Summoner values(
                   ".$db->escapeString($data['profileIconId']).",
                   '".$db->escapeString($data['name'])."',
@@ -79,6 +79,7 @@ class SummonerModel
                   on duplicate key update summonerLevel = ".intval($data['summonerLevel']).",
                   on duplicate key update revisionDate = ".intval($data['revisionDate']);
         $db->query($sql);
+        */
     }
 
 }

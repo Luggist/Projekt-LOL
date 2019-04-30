@@ -5,13 +5,20 @@ class MatchHistoryModel{
     public static function getMatchHistoryByAccountId($accountId)
     {
         $db = new Database();
-        $sql = "SELECT * FROM Summoner WHERE accountId='".$db->escapeString($accountId). "'";
+        $sql = "SELECT * FROM MatchHistory WHERE accountId='".$db->escapeString($accountId). "'";
 
         $result = $db->query($sql);
 
         if($db->numRows($result) > 0)
         {
-            return $db->fetchArray($result);
+
+            $resultArray = array();
+
+            while($row = $db->fetchAssoc($result))
+            {
+                $resultArray[] = $row;
+            }
+            return $resultArray;
         }
 
         return null;
