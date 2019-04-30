@@ -56,7 +56,7 @@ class SummonerModel
                   summonerName='".$db->escapeString($data['name'])."',
                   profileIconId=".intval($data['profileIconId']).",
                   summonerLevel = ".intval($data['summonerLevel']).",
-                  revisionDate = ".intval($data['revisionDate'])
+                  revisionDate = ".intval($data['revisionDate']);
 
         $db->query($sql);
 
