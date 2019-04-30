@@ -12,19 +12,19 @@ html {
   padding-left: 10px;
   padding-right: 10px;
   padding-top: 10px;
-  height: 300px;
+  height: 450px;
   background-image: url("../../img/lolheader.jpg");
-  background-size: cover;
+  background-size: 100%;
   background-repeat: no-repeat;
-  background-position: center;
 }
 /* line 19, ../sass/screen.scss */
 .header-img .overlay {
-  position: absolute;
-  top: 240px;
+  position: static;
   left: 50%;
   width: 700px;
-  margin-left: -350px;
+  margin-top: 20%;
+  margin-left: auto;
+  margin-right: auto;
   background-color: #1e2328;
   padding: 40px 60px;
   display: flex;
@@ -46,13 +46,13 @@ html {
   background-color: #1e2328;
   border-image-slice: 1;
   transition: all 0.5s ease;
+  position: static;
 }
 /* line 44, ../sass/screen.scss */
 .header-img .overlay input:hover {
   box-shadow: 0 0 10px 4px rgba(192, 252, 253, 0.4), inset 0 0 5px 2px rgba(192, 252, 253, 0.3);
   border: 3px solid rgba(192, 252, 253, 0.7);
 }
-
 /* line 52, ../sass/screen.scss */
 .overlay {
   border: 2px;
@@ -60,6 +60,8 @@ html {
   background-clip: padding-box;
   border: solid;
   border-radius: initial;
+  top: 25%;
+  padding-left:0px;
 }
 
 /* line 62, ../sass/screen.scss */
@@ -278,6 +280,7 @@ h3::after {
 
 .bg-loldark .list-group-item {
   cursor: pointer;
+  transition: font-size .5s ease-in-out;
 }
 
 .bg-loldark li {
@@ -303,14 +306,15 @@ h3::after {
   border-top: 2px solid #c7b184;
   background-color: #303840;
   width: 100%;
-  top: 300px;
+  top: 1%;
   bottom: 100px;
   padding-bottom: 100px;
   z-index: -1;
 }
 /* line 278, ../sass/screen.scss */
 #stats .row {
-  padding-top: 90px;
+  position: static;
+  padding-top: 30%;
   padding-left: 50px;
   padding-right: 50px;
   overflow-y: scroll;
@@ -338,7 +342,7 @@ h3::after {
 
 /* line 288, ../sass/screen.scss */
 footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   height: 100px;
   width: 100%;
