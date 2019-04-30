@@ -103,7 +103,7 @@
                     $('.header-img .overlay').css('width', '100%');
                     $('.header-img .overlay').css('top', '302px');
                     $('.header-img .overlay').css('border', '0');
-                    $('.header-img .overlay').css('justify-content', 'flex-start');
+                    $('.header-img .overlay').css('justify-content', 'space-evenly');
                     $('.header-img .overlay input').css('margin-right', '15px');
                     $('.header-img .overlay').css('border-bottom', '2px solid #c7b184');
                     $('.header-img .overlay').css('border-top', '2px solid #c7b184');
@@ -112,6 +112,7 @@
                     $('.header-img .overlay input').css('max-width', '50%');
                     $('.header-img .overlay input').css('float', 'left');
                     $('.header-img .overlay input').css('margin-left', '10px');
+                    $('.header-img .overlay').addClass('btn-line-moblie');
                     $('#loginRegister').css('display', 'flex');
                     $('#loginRegister').css('flex-direction', 'row');
                     $('#loginBtn').css('display', 'none');

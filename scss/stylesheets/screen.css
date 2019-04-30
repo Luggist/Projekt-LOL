@@ -1,9 +1,11 @@
 /* line 3, ../sass/screen.scss */
 html {
   font-family: 'Lato', sans-serif;
+  min-height: 100%;
 }
 body{
   background: #303840;
+  height:1200px;
 }
 /* line 6, ../sass/screen.scss */
 .header-img {
@@ -359,11 +361,19 @@ footer {
 }
 
 @media only screen and (max-width:450px){
+
+     .searchBtn{
+        width: 100% !important;
+  }
     .header-img .overlay{
       width:110%;
       padding: 40px;
       padding-right: 60px;
 
 }
+  .btn-line-mobile {
+    padding-right: 5px !important;
+    padding-left: 5px !important;
+  }
 
 }
