@@ -86,6 +86,21 @@ class IndexController extends Controller
                     echo json_encode($output);
                     exit;
                 }
+                $leagueArr = $this->view->api->call('https://euw1.api.riotgames.com/lol/league/v4/positions/by-summoner/' . $arr["id"]);
+
+                $leagueArrDb = SummonerLeagueModel::getSummonerLeagueByName($summonerClean);
+                $leagueString = 'In aktueller Season keine Liga.';
+                if($leagueArrDb != null){
+                    $leagueArr = $leagueArrDb;
+                    if($leagueArr != null){
+                        $leagueString = str_replace("_", " ", $leagueArr["queueType"]) . ': ' . $leagueArr["tier"] . ' ' . $leagueArr["rank"] . ' (' . $leagueArr["leaguePoints"] . 'LP)';
+                    }
+                } else {
+                    SummonerLeagueModel::createSummonerLeague($leagueArr[0]);
+                    if($leagueArr[0] != null){
+                        $leagueString = str_replace("_", " ", $leagueArr[0]["queueType"]) . ': ' . $leagueArr[0]["tier"] . ' ' . $leagueArr[0]["rank"] . ' (' . $leagueArr[0]["leaguePoints"] . 'LP)';
+                    }
+                }
                 $summonerDb = SummonerModel::getSummonerByName($summonerClean);
                 if($summonerDb != null) {
                     $arr = $summonerDb;
@@ -131,7 +146,11 @@ class IndexController extends Controller
 
                         //header('Content-type: application/json');
                         header("Access-Control-Allow-Origin: *");
-                        echo '<div class="row profile">
+                        echo '<div class="row">
+                            <div class="col-md-12">
+                                 ' . $leagueArr["queueType"] . ': ' . $leagueArr["tier"] . ' ' . $leagueArr["rank"] . '                   
+                            </div>
+            </div><div class="row profile">
                 <div class="col-md-3" style="background-image: url(http://ddragon.leagueoflegends.com/cdn/img/champion/loading/' . $champMasteryName . '_0.jpg); background-repeat: no-repeat; background-size: cover; height:459px; width:100%;">
                     <div class="dark-overlay"></div>
                     <div class="profile-sidebar">
@@ -358,6 +377,10 @@ class IndexController extends Controller
                         echo '</ul>
                     </div>
                 </div>
+            </div><div class="row profile">
+                            <div class="col-md-3" style="padding: 10px; color: #c7b184;">
+                                 ' . $leagueString . '              
+                            </div>
             </div>';
                         exit;
                 }

@@ -10,40 +10,49 @@ class SummonerLeagueModel
 {
     public static function createSummonerLeague($data)
     {
+        if($data == null) return; // checks if summoner is not ranked
+        $hotStreak = ($data["hotStreak"] ? 1 : 0);
+        $veteran = ($data["veteran"] ? 1 : 0);
+        $inactive = ($data["inactive"] ? 1 : 0);
+        $freshBlood = ($data["freshBlood"] ? 1 : 0);
         $db = new Database();
-
-        $sql = "update createSummonerLeague set
+        $sql = "select * from SummonerLeague where queueType = '" . $db->escapeString($data['queueType']) . "' and summonerId = '" . $db->escapeString($data['summonerId']) . "'";
+        $sqlUpdate = "update SummonerLeague set
                 summonerName = '" . $db->escapeString($data['summonerName']) . "',
-                hotstreak = " . boolval($data['hotstreak']) . ",
+                hotStreak = " . $hotStreak . ",
                 wins = " . intval($data['wins']) . ",
-                veteran= " . boolval($data['veteran']) . ",
-                losses = '" . intval($data['losses']) . "',
+                veteran= " . $veteran . ",
+                losses = " . intval($data['losses']) . ",
                 rank = '" . $db->escapeString($data['rank']) . "',
                 leagueId = '" . $db->escapeString($data['leagueId']) . "',
-                inactive = " . boolval($data['inactive']) . ",
-                freshBlood = " . boolval($data['freshBlood']) . ",
+                inactive = " . $inactive . ",
+                freshBlood = " . $freshBlood . ",
                 tier = '" . $db->escapeString($data['tier']) . "',
                 leaguePoints =" . intval($data['leaguePoints']) . "
-                where queueType = '" . $db->escapeString($data['queueType']) . "' and summonerId = '" . $db->escapeString($data['summonerId']) . "'
-                if @@ROWCOUNT =0 insert into Summoner values(
+                where queueType = '" . $db->escapeString($data['queueType']) . "' and summonerId = '" . $db->escapeString($data['summonerId']) . "'";
+        $sqlInsert = "insert into SummonerLeague values(
                 '" . $db->escapeString($data['queueType']) . "',
                 '" . $db->escapeString($data['summonerName']) . "',
-                " . boolval($data['hotstreak']) . ",
+                " . $hotStreak . ",
                 " . intval($data['wins']) . ",
-                " . boolval($data['veteran']) . ",
-                '" . intval($data['losses']) . "',
+                " . $veteran . ",
+                " . intval($data['losses']) . ",
                 '" . $db->escapeString($data['rank']) . "',
                 '" . $db->escapeString($data['leagueId']) . "',
-                " . boolval($data['inactive']) . ",
-                " . boolval($data['freshBlood']) . ",
+                " . $inactive . ",
+                " . $freshBlood . ",
                 '" . $db->escapeString($data['tier']) . "',
                 '" . $db->escapeString($data['summonerId']) . "',
                 " . intval($data['leaguePoints']) . "
                 )"
         ;
 
-        $db->query($sql);
-
+        $result = $db->query($sql);
+        if($db->numRows($result) > 0){
+            $db->query($sqlUpdate);
+        } else {
+            $db->query($sqlInsert);
+        }
     }
 
     public static function getSummonerLeagueByName($summonerName)
