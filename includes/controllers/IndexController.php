@@ -229,7 +229,11 @@ class IndexController extends Controller
                                         break;
                                     }
                                 }
-                                $participants .= '<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $champName . '.png" width="16px" height="16px" alt=" "/> ' . $participant["player"]["summonerName"];
+                                $participantName = $participant["player"]["summonerName"];
+                                if(strtolower($participantName) == strtolower($summonerClean)){
+                                    $participantName = '<span style="color: #c7b184;">' . $participantName . '</span>';
+                                }
+                                $participants .= '<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $champName . '.png" width="16px" height="16px" alt=" "/> ' . $participantName;
                             }
                             // Prüfe ob das aktuelle Game gewonnen ist
                             foreach ($teamsArr as $team) {
@@ -260,7 +264,7 @@ class IndexController extends Controller
                                 $sumName = $arr["summonerName"];
                             }
                             $matchString = '<li class="list-group-item"><span class="text-warning">' . $matchArr["gameMode"] . '</span> ' . $dayString . ' ' . $winString . ' <span>
-                                    <img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $myChampName . '.png" width="16px" height="16px" alt=" "/> ' . $sumName . '</span>
+                                    <img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $myChampName . '.png" width="16px" height="16px" alt=" "/> ' . $sumName . '</span><br>
                                             <span class="float-right">' . $participants . '</span></li>';
                             echo $matchString;
                             $i++;
@@ -354,7 +358,11 @@ class IndexController extends Controller
                                         break;
                                     }
                                 }
-                                $participants .= '<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $champName . '.png" width="16px" height="16px" alt=" "/> ' . $participant["player"]["summonerName"];
+                                $participantName = $participant["player"]["summonerName"];
+                                if(strtolower($participantName) == strtolower($summonerClean)){
+                                    $participantName = '<span style="color: #c7b184;">' . $participantName . '</span>';
+                                }
+                                $participants .= '<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $champName . '.png" width="16px" height="16px" alt=" "/> ' . $participantName;
                             }
                             foreach ($teamsArr as $team) {
                                 if ($team["teamId"] == $teamId) {
