@@ -1,6 +1,3 @@
-<?php
-echo $this->header;
-?>
 <div id="main">
 	<h1>404 Seite nicht gefunden</h1>
 
@@ -17,8 +14,3 @@ echo $this->header;
 		<li>Nutzen Sie die Navigation um zu der Seite zu gelangen die Sie aufrufen wollten</li>
 	</ul>
 </div>
-<?php
-
-echo $this->footer;
-
-?>

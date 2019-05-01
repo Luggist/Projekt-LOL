@@ -10,8 +10,5 @@ class LoginRegisterController extends Controller
 	public function run()
 	{
 		$this->view->title = 'Login / Register';
-
-
-
 	}
 }

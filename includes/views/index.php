@@ -96,6 +96,7 @@
                     $('#searchBtn').prop('disabled', '');
                     $('#summonerInput').val(summoner);
                 } else {
+                    // Setze Css Parameter, für dynamische Layoutänderungen
                     $('.header-img .overlay').css('left', '0');
                     $('.header-img .overlay').css('flex-direction', 'row');
                     $('.header-img .overlay').css('margin-left', '0');

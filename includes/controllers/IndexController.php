@@ -10,12 +10,17 @@ class IndexController extends Controller
 	public function run()
 	{
 		$this->view->title = 'LOL Stats';
+
+		// Instanziere externe API mit API Schlüssel
 		$this->view->api = new ExternAPI('RGAPI-b046bc26-ac01-416e-b531-4001abef6f0c');
+
 		CreateTablesModel::createTables();
 
+		// User logout
 		if(isset($_GET['logout'])){
 		    $this->user->isLoggedIn = false;
         }
+
         if(isset($_POST['request'])){
             $output = array(
                 "state" => false,
@@ -76,6 +81,9 @@ class IndexController extends Controller
             if ($apiRequest == 'summoner') {
                 $summonerClean = $_POST['summoner'];
                 $summoner = str_replace(' ', '%20', $summonerClean);
+
+                // Funktion call macht mittels curl eine Anfrage an die API welche als Parameter übergeben wird
+                // return array()
                 $arr = $this->view->api->call('https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/' . $summoner);
                 if ($arr["id"] == null) {
                     header('Content-type: application/json');
@@ -106,51 +114,48 @@ class IndexController extends Controller
                     $arr = $summonerDb;
                 }
                 SummonerModel::createNewSummoner($arr);
-                    $champMastery = $this->view->api->call('https://euw1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/' . $arr["id"]);
-                    $champData = json_decode(file_get_contents('http://ddragon.leagueoflegends.com/cdn/6.24.1/data/de_DE/champion.json'), true);
-                    $champMasteryName = '';
-                    foreach ($champData["data"] as $champ) {
-                        if ($champ["key"] == $champMastery[0]["championId"]) {
-                            $champMasteryName = $champ["id"];
+                $champMastery = $this->view->api->call('https://euw1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/' . $arr["id"]);
+                // Hole Champion Daten von statischer API
+                $champData = json_decode(file_get_contents('http://ddragon.leagueoflegends.com/cdn/6.24.1/data/de_DE/champion.json'), true);
+                $champMasteryName = '';
+                foreach ($champData["data"] as $champ) {
+                    if ($champ["key"] == $champMastery[0]["championId"]) {
+                        $champMasteryName = $champ["id"];
+                        break;
+                    }
+                }
+
+                // Setze je nach Level anderes Border Bild
+                $levelPic = 'img/';
+                if ($arr["summonerLevel"] < 30) {
+                    $levelPic .= 'level29.png';
+                } else if ($arr["summonerLevel"] < 50) {
+                    $levelPic .= 'level49.png';
+                } else if ($arr["summonerLevel"] < 75) {
+                    $levelPic .= 'level74.png';
+                } else if ($arr["summonerLevel"] < 100) {
+                    $levelPic .= 'level99.png';
+                } else if ($arr["summonerLevel"] < 125) {
+                    $levelPic .= 'level124.png';
+                } else if ($arr["summonerLevel"] < 150) {
+                    $levelPic .= 'level149.png';
+                } else if ($arr["summonerLevel"] < 175) {
+                    $levelPic .= 'level174.png';
+                } else {
+                    $levelPic .= 'level175.png';
+                }
+                $matchListDb = MatchHistoryModel::getMatchHistoryByAccountId($arr["accountId"]);
+                if ($matchListDb == null) {
+                    // Hole MatchList von Externer API da nicht in DB vorhanden
+                    $matchList = $this->view->api->call('https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/' . $arr["accountId"]);
+                    foreach($matchList["matches"] as $match){
+                        if(MatchHistoryModel::createNewMatchHistory($match, $arr["accountId"])){
                             break;
                         }
                     }
 
-                    $levelPic = 'img/';
-                    if ($arr["summonerLevel"] < 30) {
-                        $levelPic .= 'level29.png';
-                    } else if ($arr["summonerLevel"] < 50) {
-                        $levelPic .= 'level49.png';
-                    } else if ($arr["summonerLevel"] < 75) {
-                        $levelPic .= 'level74.png';
-                    } else if ($arr["summonerLevel"] < 100) {
-                        $levelPic .= 'level99.png';
-                    } else if ($arr["summonerLevel"] < 125) {
-                        $levelPic .= 'level124.png';
-                    } else if ($arr["summonerLevel"] < 150) {
-                        $levelPic .= 'level149.png';
-                    } else if ($arr["summonerLevel"] < 175) {
-                        $levelPic .= 'level174.png';
-                    } else {
-                        $levelPic .= 'level175.png';
-                    }
-                    $matchListDb = MatchHistoryModel::getMatchHistoryByAccountId($arr["accountId"]);
-                    if ($matchListDb == null) {
-                        // Get Matchlist
-                        $matchList = $this->view->api->call('https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/' . $arr["accountId"]);
-                        foreach($matchList["matches"] as $match){
-                            if(MatchHistoryModel::createNewMatchHistory($match, $arr["accountId"])){
-                                break;
-                            }
-                        }
-
-                        //header('Content-type: application/json');
-                        header("Access-Control-Allow-Origin: *");
-                        echo '<div class="row">
-                            <div class="col-md-12">
-                                 ' . $leagueArr["queueType"] . ': ' . $leagueArr["tier"] . ' ' . $leagueArr["rank"] . '                   
-                            </div>
-            </div><div class="row profile">
+                    header("Access-Control-Allow-Origin: *");
+                    echo '<div class="row profile">
                 <div class="col-md-3" style="background-image: url(http://ddragon.leagueoflegends.com/cdn/img/champion/loading/' . $champMasteryName . '_0.jpg); background-repeat: no-repeat; background-size: cover; height:459px; width:100%;">
                     <div class="dark-overlay"></div>
                     <div class="profile-sidebar">
@@ -200,18 +205,21 @@ class IndexController extends Controller
                                 $championId = 0;
                                 $champName = "ZZZZ";
                                 foreach ($participantsArr as $participantDetail) {
+                                    // Hole TeamId und ChampId des Summoners
                                     if (($participantDetail["participantId"] == $participant["participantId"]) && (strtolower($participant["player"]["summonerName"]) == strtolower($summonerClean))) {
                                         $teamId = $participantDetail["teamId"];
                                         $champId = $participantDetail["championId"];
                                         break;
                                     }
                                 }
+                                // Hole ChampionId des jeweiligen Participant
                                 foreach ($participantsArr as $participantDetail) {
                                     if ($participantDetail["participantId"] == $participant["participantId"]) {
                                         $championId = $participantDetail["championId"];
                                         break;
                                     }
                                 }
+                                // Hole sowohl Champion Name von Summoner als auch vom jeweiligen Participant
                                 foreach ($champData["data"] as $champ) {
                                     if ($champ["key"] == $champId) {
                                         $myChampName = $champ["id"];
@@ -223,6 +231,7 @@ class IndexController extends Controller
                                 }
                                 $participants .= '<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $champName . '.png" width="16px" height="16px" alt=" "/> ' . $participant["player"]["summonerName"];
                             }
+                            // Prüfe ob das aktuelle Game gewonnen ist
                             foreach ($teamsArr as $team) {
                                 if ($team["teamId"] == $teamId) {
                                     if ($team["win"] === "Fail") {
@@ -235,11 +244,12 @@ class IndexController extends Controller
                                 $winString = '<span class="text-danger">LOST</span>';
                             }
 
-
+                            // Berechne Tage welche vergangen sind, seit das Game gespielt wurde
                             $now = time();
                             $gameDate = $matchArr["gameCreation"] / 1000;
                             $datediff = $now - $gameDate;
                             $days = round($datediff / (60 * 60 * 24));
+                            // ** Ende Berechnung **
                             $dayString = '<span class="text-muted">Today</span>';
                             if ($days > 0) {
                                 $dayString = '<span class="text-muted">' . $days . ' days ago</span>';
@@ -258,17 +268,20 @@ class IndexController extends Controller
                         echo '</ul>
                     </div>
                 </div>
+            </div><div class="row profile">
+                            <div class="col-md-3" style="padding: 10px; color: #c7b184;">
+                                 ' . $leagueString . '              
+                            </div>
             </div>';
                         exit;
                     } else {
-                        // Get Matchlist
+                        // Hole MatchList aus Datenbank und aktuallisiere über Externe API, falls veraltet
                         $matchList = $this->view->api->call('https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/' . $arr["accountId"]);
                         foreach($matchList["matches"] as $match){
                             MatchHistoryModel::createNewMatchHistory($match, $arr["accountId"]);
                         }
                         $matchList = $matchListDb;
 
-                        //header('Content-type: application/json');
                         header("Access-Control-Allow-Origin: *");
                         echo '<div class="row profile">
                 <div class="col-md-3" style="background-image: url(http://ddragon.leagueoflegends.com/cdn/img/champion/loading/' . $champMasteryName . '_0.jpg); background-repeat: no-repeat; background-size: cover; height:459px; width:100%;">

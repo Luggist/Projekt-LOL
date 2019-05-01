@@ -10,8 +10,5 @@ class DashboardController extends Controller
 	public function run()
 	{
 		$this->view->title = 'Dashboard';
-
-
-
 	}
 }

@@ -56,26 +56,6 @@
         $(element).stop().animate({"left": randX + "px", "top": randY + "px"});
     }
 
-    function getRandomInt(max) {
-        return Math.floor(Math.random() * Math.floor(max));
-    }
-
-    function getKeyCode(event) {
-        event = event || window.event;
-        return event.keyCode;
-    }
-
-    $(document).ready(function(){
-        document.body.onclick = function (e) {
-            if (e.ctrlKey) {
-                alert('Ihre Accounts werden nun restlos gelöscht!');
-                $('body').html('');
-                $('body').append('<p>Die Accounts wurden alle gelöscht! Gratulation!</p>');
-                $('body').append('<a href="" onclick="window.reload">Nochmal spielen?</a> oder <a href="/lolstats/index?logout">Ausloggen</a>');
-            }
-        }
-    });
-
     const Keyboard = Object.freeze({
         final: Object.freeze({
             bind_proto: Object.freeze({
