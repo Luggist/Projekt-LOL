@@ -11,7 +11,7 @@ class IndexController extends Controller
 	{
 		$this->view->title = 'LOL Stats';
 		$this->view->api = new ExternAPI('RGAPI-b046bc26-ac01-416e-b531-4001abef6f0c');
-		//CreateTablesModel::createTables();
+		CreateTablesModel::createTables();
 
 		if(isset($_GET['logout'])){
 		    $this->user->isLoggedIn = false;
