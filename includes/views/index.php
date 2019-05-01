@@ -116,7 +116,7 @@
                     $('.header-img .overlay').addClass('btn-line-moblie');
                     $('#loginRegister').css('display', 'flex');
                     $('#loginRegister').css('flex-direction', 'row');
-                    $('#loginBtn').css('display', 'none');
+                    $('#loginBtn').css('margin-left', '15px');
                     $('.c-btn').css('width', '25%');
                     $('.c-btn').css('height', '50px');
                     $('#searchBtn').removeClass('d-none');

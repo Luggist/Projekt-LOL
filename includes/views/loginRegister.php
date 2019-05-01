@@ -25,6 +25,8 @@
     <div class="header-img">
         <div class="overlay">
             <div id="loginRegister">
+                <button class="c-btn btn-block rounded-0" onclick="window.location='/lolstats/index';">G O T O&nbsp;&nbsp;&nbsp;&nbsp;S E A R C H</button><br><br><br>
+                <div class="hr-gold"><h3>OR</h3></div>
                 <input class="form-control" type="hidden">
                 <input id="username" class="form-control d-none" type="text" placeholder="Benutzername">
                 <input id="password" class="form-control d-none" type="password" placeholder="Passwort">
