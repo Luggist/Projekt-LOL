@@ -162,26 +162,32 @@ class IndexController extends Controller
                             if ($i == 20) break;
                             $matchArrDb = MatchesModel::getMatchesByGameId($match["gameId"]);
                             $matchArr = $matchArrDb;
+                            $participantIdents = json_decode($matchArr["participantIdentities"], true);
+                            $participantsArr = json_decode($matchArr["participants"], true);
+                            $teamsArr = json_decode($matchArr["teams"], true);
                             if($matchArr == null){
                                 $matchArr = $this->view->api->call('https://euw1.api.riotgames.com/lol/match/v4/matches/' . $match["gameId"]);
                                 MatchesModel::createNewMatches($matchArr);
+                                $participantIdents = $matchArr["participantIdentities"];
+                                $participantsArr = $matchArr["participants"];
+                                $teamsArr = $matchArr["teams"];
                             }
                             $participants = '';
                             $teamId = 0;
                             $champId = 0;
                             $myChampName = '';
                             $win = true;
-                            foreach ($matchArr["participantIdentities"] as $participant) {
+                            foreach ($participantIdents as $participant) {
                                 $championId = 0;
                                 $champName = "ZZZZ";
-                                foreach ($matchArr["participants"] as $participantDetail) {
+                                foreach ($participantsArr as $participantDetail) {
                                     if (($participantDetail["participantId"] == $participant["participantId"]) && (strtolower($participant["player"]["summonerName"]) == strtolower($summonerClean))) {
                                         $teamId = $participantDetail["teamId"];
                                         $champId = $participantDetail["championId"];
                                         break;
                                     }
                                 }
-                                foreach ($matchArr["participants"] as $participantDetail) {
+                                foreach ($participantsArr as $participantDetail) {
                                     if ($participantDetail["participantId"] == $participant["participantId"]) {
                                         $championId = $participantDetail["championId"];
                                         break;
@@ -198,7 +204,7 @@ class IndexController extends Controller
                                 }
                                 $participants .= '<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/' . $champName . '.png" width="16px" height="16px" alt=" "/> ' . $participant["player"]["summonerName"];
                             }
-                            foreach ($matchArr["teams"] as $team) {
+                            foreach ($teamsArr as $team) {
                                 if ($team["teamId"] == $teamId) {
                                     if ($team["win"] === "Fail") {
                                         $win = false;
