@@ -12,7 +12,7 @@ class IndexController extends Controller
 		$this->view->title = 'LOL Stats';
 
 		// Instanziere externe API mit API Schlüssel
-		$this->view->api = new ExternAPI('RGAPI-b046bc26-ac01-416e-b531-4001abef6f0c');
+		$this->view->api = new ExternAPI(RAPI_KEY);
 
 		CreateTablesModel::createTables();
 
