@@ -8,7 +8,7 @@
 
 class MatchesModel
 {
-    public static function createNewMatches($data) //updates summoner, if summoner doesn't exist create one
+    public static function createNewMatches($data)
     {
         $db = new Database();
         $sql = "select * from Matches where gameId = '" . $data['gameId'] . "'";
