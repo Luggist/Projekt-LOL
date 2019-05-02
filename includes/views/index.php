@@ -97,6 +97,7 @@
                     $('#summonerInput').val(summoner);
                 } else {
                     // Setze Css Parameter, für dynamische Layoutänderungen
+                    $('body').css('height', '1400px');
                     $('.header-img .overlay').css('left', '0');
                     $('.header-img .overlay').css('flex-direction', 'row');
                     $('.header-img .overlay').css('margin-left', '0');
@@ -104,6 +105,7 @@
                     $('.header-img .overlay').css('width', '100%');
                     $('.header-img .overlay').css('top', '302px');
                     $('.header-img .overlay').css('border', '0');
+                    $('.header-img .overlay').css('padding', '5px');
                     $('.header-img .overlay').css('justify-content', 'space-evenly');
                     $('.header-img .overlay input').css('margin-right', '15px');
                     $('.header-img .overlay').css('border-bottom', '2px solid #c7b184');
@@ -120,6 +122,8 @@
                     $('.c-btn').css('width', '25%');
                     $('.c-btn').css('height', '50px');
                     $('#searchBtn').removeClass('d-none');
+                    $('#searchBtn').css('font-size', '10pt');
+                    $('#loginBtn').css('font-size', '10pt');
                     $('.hr-gold').addClass('d-none');
                     $('#stats').html('');
                     $('#stats').html(data);
