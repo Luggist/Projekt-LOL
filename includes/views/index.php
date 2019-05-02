@@ -62,7 +62,7 @@
     });
 
     function goToLoginPage() {
-        window.location = '/lolstats/login';
+        window.location = 'login';
     }
 
     function searchSummoner(){
